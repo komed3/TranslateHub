@@ -16,8 +16,8 @@ class TranslationManager :
         """Initialize the translation manager with a root directory"""
 
         self.root_dir = root_dir
-        self.languages = set ()
-        self.namespaces = set ()
+        self.languages = set()
+        self.namespaces = set()
         self._load_structure()
 
 
@@ -35,8 +35,8 @@ class TranslationManager :
         """Load the existing languages and namespaces from the root directory"""
 
         if not self.root_dir or not os.path.isdir( self.root_dir ) :
-            self.languages = set ()
-            self.namespaces = set ()
+            self.languages = set()
+            self.namespaces = set()
             return
 
         # Get all language directories
@@ -46,9 +46,18 @@ class TranslationManager :
         }
 
         # Get all unique namespaces across all languages
-        self.namespaces = set ()
+        self.namespaces = set()
         for lang in self.languages :
             lang_dir = os.path.join( self.root_dir, lang )
             for file in os.listdir( lang_dir ) :
                 if file.endswith( '.json' ) :
                     self.namespaces.add( file )
+
+    def get_languages ( self ) -> List[ str ] :
+        """Get all available languages"""
+        return sorted( list( self.languages ) )
+
+    def get_namespaces ( self ) -> List[ str ] :
+        """Get all available namespaces"""
+        return sorted( list( self.namespaces ) )
+
