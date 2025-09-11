@@ -600,15 +600,15 @@ class StatisticsDialog ( QDialog ) :
             item.setForeground( QColor( 0, 0, 0 ) )
 
             if pct == 100 :
-                item.setBackground( QColor( 200, 255, 200 ) )  # Light green
+                item.setBackground( QColor( 200, 255, 200 ) )
             elif pct >= 75 :
-                item.setBackground( QColor( 220, 255, 220 ) )  # Lighter green
+                item.setBackground( QColor( 255, 255, 200 ) )
             elif pct >= 50 :
-                item.setBackground( QColor( 255, 255, 200 ) )  # Light yellow
+                item.setBackground( QColor( 255, 225, 200 ) )
             elif pct >= 25 :
-                item.setBackground( QColor( 255, 230, 200 ) )  # Light orange
+                item.setBackground( QColor( 255, 200, 200 ) )
             else :
-                item.setBackground( QColor( 255, 200, 200 ) )  # Light red
+                item.setBackground( QColor( 255, 200, 255 ) )
 
         else :
             item = QTableWidgetItem( "N/A" )
