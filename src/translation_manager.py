@@ -6,7 +6,7 @@ Handles all operations related to translation files
 import json
 import os
 import shutil
-from typing import Dict, List, Union
+from typing import Dict, List, Tuple, Union
 
 class TranslationManager :
     """Manages translation files and operations"""
@@ -333,3 +333,58 @@ class TranslationManager :
                 changes[ ns ] = ns_changes
 
         return changes
+
+
+    def get_language_progress ( self, lang: str ) -> Tuple[ int, int ] :
+        """Get overall translation progress for a language"""
+
+        if not self.root_dir or lang not in self.lngs :
+            return ( 0, 0 )
+
+        total_keys = 0
+        done_keys = 0
+        for ns in self.ns :
+            data = self.get_translations( lang, ns )
+            total_keys += len( data )
+            done_keys += sum( 1 for v in data.values() if v.strip() )
+
+        return ( done_keys, total_keys )
+
+
+    def get_namespace_progress ( self, ns: str ) -> Dict[ str, Tuple[ int, int ] ] :
+        """Get translation progress for a namespace across all languages"""
+
+        if not self.root_dir or ns not in self.ns :
+            return {}
+
+        progress = {}
+        for lang in self.lngs :
+            data = self.get_translations( lang, ns )
+            total = len( data )
+            done = sum( 1 for v in data.values() if v.strip() )
+            progress[ lang ] = ( done, total )
+
+        return progress
+
+
+    def get_all_progress ( self ) -> Dict[ str, Dict[ str, Tuple[ int, int ] ] ] :
+        """
+        Get detailed progress statistics for all languages and namespaces
+        Returns a nested dictionary with languages and namespaces as keys
+        and tuples of (translated_count, total_count) as values
+        """
+
+        if not self.root_dir :
+            return {}
+
+        progress = {}
+        for lang in self.lngs :
+            lang_progress = {}
+            for ns in self.ns :
+                data = self.get_translations( lang, ns )
+                total = len( data )
+                done = sum( 1 for v in data.values() if v.strip() )
+                lang_progress[ ns ] = ( done, total )
+            progress[ lang ] = lang_progress
+
+        return progress
