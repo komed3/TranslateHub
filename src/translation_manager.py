@@ -163,3 +163,46 @@ class TranslationManager :
             self.namespaces.remove( namespace )
 
         return success
+
+
+    def rename_language ( self, old_code: str, new_code: str ) -> bool :
+        """Rename a language folder"""
+
+        if not self.root_dir or old_code not in self.languages or new_code in self.languages :
+            return False
+
+        old_path = os.path.join( self.root_dir, old_code )
+        new_path = os.path.join( self.root_dir, new_code )
+        try :
+            os.rename( old_path, new_path )
+            self.languages.remove( old_code )
+            self.languages.add( new_code )
+            return True
+        except Exception :
+            return False
+
+
+    def rename_namespace ( self, old_name: str, new_name: str ) -> bool :
+        """Rename a namespace in all languages"""
+
+        if not self.root_dir or old_name not in self.namespaces or new_name in self.namespaces :
+            return False
+
+        if not new_name.endswith( '.json' ) :
+            new_name = f"{new_name}.json"
+
+        success = True
+        for lang in self.languages :
+            old_path = os.path.join( self.root_dir, lang, old_name )
+            new_path = os.path.join( self.root_dir, lang, new_name )
+            try :
+                if os.path.exists( old_path ) :
+                    os.rename( old_path, new_path )
+            except Exception :
+                success = False
+
+        if success :
+            self.namespaces.remove( old_name )
+            self.namespaces.add( new_name )
+
+        return success
