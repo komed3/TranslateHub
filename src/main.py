@@ -6,7 +6,6 @@ Cross-platform translation management tool for i18n projects
 
 import os
 import sys
-from datetime import datetime
 from pathlib import Path
 from typing import Dict, Tuple, Union
 
@@ -31,8 +30,9 @@ from translation_manager import TranslationManager
 
 
 # Application version
-APP_VERSION = "0.1.0"
+VERSION = "0.1.0"
 GITHUB_REPO = "https://github.com/komed3/TranslateHub"
+YEAR = "2025"
 
 
 class ConfigDialog ( QDialog ) :
@@ -47,7 +47,6 @@ class ConfigDialog ( QDialog ) :
         super().__init__( parent )
         self.setWindowTitle( "Configuration" )
         self.resize( 500, 200 )
-
         self.layout = QVBoxLayout() # type: ignore
 
         # Root directory selection
@@ -106,7 +105,6 @@ class TranslationKeyDialog ( QDialog ) :
         super().__init__( parent )
         self.setWindowTitle( "Add Translation Key" if not edit_mode else "Edit Translation Key" )
         self.resize( 400, 200 )
-
         self.layout = QVBoxLayout() # type: ignore
 
         # Key input
@@ -157,7 +155,6 @@ class RenameKeyDialog ( QDialog ) :
         super().__init__( parent )
         self.setWindowTitle( "Rename Translation Key" )
         self.resize( 400, 120 )
-
         self.layout = QVBoxLayout() # type: ignore
 
         # Old key display
@@ -194,3 +191,64 @@ class RenameKeyDialog ( QDialog ) :
     def get_new_key ( self ) -> str :
         """Get the entered new key"""
         return self.new_key_input.text()
+
+
+class AboutDialog ( QDialog ) :
+    """About dialog showing application information"""
+
+    def __init__ ( self, parent: Union[ QWidget, None ] = None ) :
+        """Initialize about dialog"""
+
+        super().__init__( parent )
+        self.setWindowTitle( "About TranslateHub" )
+        self.resize( 400, 300 )
+        self.layout = QVBoxLayout() # type: ignore
+
+        # App title
+        title_label = QLabel( "TranslateHub" )
+        title_label.setFont( QFont( "", 16, QFont.Weight.Bold ) )
+        title_label.setAlignment( Qt.AlignmentFlag.AlignCenter )
+        self.layout.addWidget( title_label ) # type: ignore
+
+        # Version
+        version_label = QLabel( f"Version {VERSION}" )
+        version_label.setAlignment( Qt.AlignmentFlag.AlignCenter )
+        self.layout.addWidget( version_label ) # type: ignore
+
+        # Description
+        desc_label = QLabel( " \
+            A cross-platform translation management tool for i18n projects. \
+            Designed to make translation work quick and efficient. \
+        " )
+
+        desc_label.setAlignment( Qt.AlignmentFlag.AlignCenter )
+        desc_label.setWordWrap( True )
+        self.layout.addWidget( desc_label ) # type: ignore
+        self.layout.addSpacing( 20 ) # type: ignore
+
+        # Copyright
+        copyright_label = QLabel( f"© {YEAR} komed3 (Paul Köhler)" )
+        copyright_label.setAlignment( Qt.AlignmentFlag.AlignCenter )
+        self.layout.addWidget( copyright_label ) # type: ignore
+        
+        # GitHub link
+        github_button = QPushButton( "Visit GitHub Repository" )
+        github_button.clicked.connect( lambda: QDesktopServices.openUrl( QUrl( GITHUB_REPO ) ) )
+        self.layout.addWidget( github_button ) # type: ignore
+        self.layout.addSpacing( 20 ) # type: ignore
+
+        # System info
+        sys_info = QLabel( f" \
+            Python: {sys.version.split()[ 0 ]}\n \
+            PyQt: {QT_VERSION_STR} / {PYQT_VERSION_STR}\n \
+            OS: {sys.platform} \
+        " )
+
+        sys_info.setAlignment( Qt.AlignmentFlag.AlignCenter )
+        self.layout.addWidget( sys_info ) # type: ignore
+
+        # Close button
+        self.button_box = QDialogButtonBox( QDialogButtonBox.StandardButton.Close )
+        self.button_box.rejected.connect( self.reject )
+        self.layout.addWidget( self.button_box ) # type: ignore
+        self.setLayout( self.layout ) # type: ignore
