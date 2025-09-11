@@ -42,7 +42,7 @@ class TranslationManager :
 
         # Get all language directories
         self.languages = {
-            d for d in os.listdir( self.root_dir ) 
+            d for d in os.listdir( self.root_dir )
             if os.path.isdir( os.path.join( self.root_dir, d ) )
         }
 
@@ -55,11 +55,12 @@ class TranslationManager :
                     self.namespaces.add( file )
 
 
-    def _write_file ( self, lang: str, namespace: str, data: object = {} ) -> None :
+    def _write_file ( self, lang: str, namespace: str, data: object | None = None ) -> None :
         """Write data to a specific language and namespace file"""
 
-        with open( os.path.join( self.root_dir or '', lang, namespace ), 'w', encoding= 'utf-8' ) as nf :
-            json.dump( data, nf, ensure_ascii= False, indent= 2 )
+        path = os.path.join( self.root_dir or '', lang, namespace )
+        with open( path, 'w', encoding= 'utf-8' ) as nf :
+            json.dump( data or {}, nf, ensure_ascii= False, indent= 2 )
             nf.write( '\n\n' )
 
 
