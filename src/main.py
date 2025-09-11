@@ -133,7 +133,7 @@ class TranslationKeyDialog ( QDialog ) :
 
         # Dialog buttons
         self.button_box = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Ok | 
+            QDialogButtonBox.StandardButton.Ok |
             QDialogButtonBox.StandardButton.Cancel
         )
 
@@ -146,3 +146,51 @@ class TranslationKeyDialog ( QDialog ) :
     def get_key_value ( self ) -> Tuple[ str, str ] :
         """Get the entered key and value"""
         return self.key_input.text(), self.value_input.toPlainText()
+
+
+class RenameKeyDialog ( QDialog ) :
+    """Dialog for renaming translation keys"""
+
+    def __init__ ( self, parent: Union[ QWidget, None ] = None, old_key: str = "" ) :
+        """Initialize rename translation key dialog"""
+
+        super().__init__( parent )
+        self.setWindowTitle( "Rename Translation Key" )
+        self.resize( 400, 120 )
+
+        self.layout = QVBoxLayout() # type: ignore
+
+        # Old key display
+        old_key_layout = QHBoxLayout()
+        self.old_key_label = QLabel( "Current Key:" )
+        self.old_key_display = QLineEdit( old_key )
+        self.old_key_display.setReadOnly( True )
+
+        old_key_layout.addWidget( self.old_key_label )
+        old_key_layout.addWidget( self.old_key_display, 1 )
+        self.layout.addLayout( old_key_layout ) # type: ignore
+
+        # New key input
+        new_key_layout = QHBoxLayout()
+        self.new_key_label = QLabel( "New Key:" )
+        self.new_key_input = QLineEdit()
+
+        new_key_layout.addWidget( self.new_key_label )
+        new_key_layout.addWidget( self.new_key_input, 1 )
+        self.layout.addLayout( new_key_layout ) # type: ignore
+
+        # Dialog buttons
+        self.button_box = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok |
+            QDialogButtonBox.StandardButton.Cancel
+        )
+
+        self.button_box.accepted.connect( self.accept )
+        self.button_box.rejected.connect( self.reject )
+        self.layout.addWidget( self.button_box ) # type: ignore
+        self.setLayout( self.layout ) # type: ignore
+
+
+    def get_new_key ( self ) -> str :
+        """Get the entered new key"""
+        return self.new_key_input.text()
