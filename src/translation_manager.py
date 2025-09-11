@@ -297,3 +297,39 @@ class TranslationManager :
                     success = False
 
         return success
+
+
+    def synchronize_keys ( self ) -> Dict[ str, int ] :
+        """Synchronize translation keys across all languages and namespaces"""
+
+        if not self.root_dir :
+            return {}
+
+        # For each namespace, collect all keys from all languages
+        changes = {}
+        for ns in self.ns :
+            all_keys = set()
+            for lang in self.lngs :
+                data = self.get_translations( lang, ns )
+                all_keys.update( data.keys() )
+
+            # Ensure all languages have all keys
+            ns_changes = 0
+            for lang in self.lngs :
+                data = self.get_translations( lang, ns )
+                orig_count = len( data )
+
+                # Add missing keys
+                for key in all_keys :
+                    if key not in data :
+                        data[ key ] = ""
+                        ns_changes += 1
+
+                # Save if changes were made
+                if len( data ) != orig_count :
+                    self.save_translations( lang, ns, data )
+
+            if ns_changes > 0 :
+                changes[ ns ] = ns_changes
+
+        return changes
