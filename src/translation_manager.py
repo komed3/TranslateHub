@@ -15,8 +15,8 @@ class TranslationManager :
         """Initialize the translation manager with a root directory"""
 
         self.root_dir = root_dir
-        self.languages = set()
-        self.namespaces = set()
+        self.lngs = set()
+        self.ns = set()
         self._load_structure()
 
 
@@ -32,32 +32,32 @@ class TranslationManager :
 
 
     def _load_structure ( self ) -> None :
-        """Load the existing languages and namespaces from the root directory"""
+        """Load the existing lngs and nss from the root directory"""
 
         if not self.root_dir or not os.path.isdir( self.root_dir ) :
-            self.languages = set()
-            self.namespaces = set()
+            self.lngs = set()
+            self.ns = set()
             return
 
         # Get all language directories
-        self.languages = {
+        self.lngs = {
             d for d in os.listdir( self.root_dir )
             if os.path.isdir( os.path.join( self.root_dir, d ) )
         }
 
-        # Get all unique namespaces across all languages
-        self.namespaces = set()
-        for lang in self.languages :
+        # Get all unique nss across all lngs
+        self.ns = set()
+        for lang in self.lngs :
             lang_dir = os.path.join( self.root_dir, lang )
             for file in os.listdir( lang_dir ) :
                 if file.endswith( '.json' ) :
-                    self.namespaces.add( file )
+                    self.ns.add( file )
 
 
-    def _write_file ( self, lang: str, namespace: str, data: Union[ object, None ] = None ) -> bool :
-        """Write data to a specific language and namespace file"""
+    def _write_file ( self, lang: str, ns: str, data: Union[ object, None ] = None ) -> bool :
+        """Write data to a specific language and ns file"""
 
-        path = os.path.join( self.root_dir or '', lang, namespace )
+        path = os.path.join( self.root_dir or '', lang, ns )
         try :
             with open( path, 'w', encoding= 'utf-8' ) as f :
                 json.dump( data or {}, f, ensure_ascii= False, indent= 2 )
@@ -67,34 +67,34 @@ class TranslationManager :
             return False
 
 
-    def get_languages ( self ) -> List[ str ] :
-        """Get all available languages"""
-        return sorted( list( self.languages ) )
+    def get_lngs ( self ) -> List[ str ] :
+        """Get all available lngs"""
+        return sorted( list( self.lngs ) )
 
 
-    def get_namespaces ( self ) -> List[ str ] :
-        """Get all available namespaces"""
-        return sorted( list( self.namespaces ) )
+    def get_nss ( self ) -> List[ str ] :
+        """Get all available nss"""
+        return sorted( list( self.ns ) )
 
 
-    def create_language ( self, language_code: str ) -> bool :
-        """Create a new language with all existing namespaces"""
+    def create_language ( self, lang_code: str ) -> bool :
+        """Create a new language with all existing nss"""
 
-        if not self.root_dir or language_code in self.languages :
+        if not self.root_dir or lang_code in self.lngs :
             return False
 
         # Create language directory
-        lang_dir = os.path.join( self.root_dir, language_code )
+        lang_dir = os.path.join( self.root_dir, lang_code )
         os.makedirs( lang_dir, exist_ok= True )
 
-        # Create all namespace files with empty translations
-        # For each namespace, copy keys from an existing language
-        for namespace in self.namespaces :
-            if self.languages :
+        # Create all ns files with empty translations
+        # For each ns, copy keys from an existing language
+        for ns in self.ns :
+            if self.lngs :
 
                 # Use the first language as a template
-                template_lang = next( iter( self.languages ) )
-                template_file = os.path.join( self.root_dir, template_lang, namespace )
+                template_lang = next( iter( self.lngs ) )
+                template_file = os.path.join( self.root_dir, template_lang, ns )
                 if os.path.exists( template_file ) :
                     with open( template_file, 'r', encoding= 'utf-8' ) as f :
 
@@ -102,60 +102,60 @@ class TranslationManager :
                         # If template file is invalid, create empty file
                         try :
                             empty_data = { k: "" for k in json.load( f ).keys() }
-                            self._write_file( language_code, namespace, empty_data )
+                            self._write_file( lang_code, ns, empty_data )
                         except json.JSONDecodeError :
-                            self._write_file( language_code, namespace )
+                            self._write_file( lang_code, ns )
 
-            # If no languages exist yet, create empty file
+            # If no lngs exist yet, create empty file
             else :
-                with open( os.path.join( lang_dir, namespace ), 'w', encoding= 'utf-8' ) as f :
+                with open( os.path.join( lang_dir, ns ), 'w', encoding= 'utf-8' ) as f :
                     json.dump( {}, f, ensure_ascii= False, indent= 2 )
 
-        self.languages.add( language_code )
+        self.lngs.add( lang_code )
         return True
 
 
-    def create_namespace ( self, namespace: str ) -> bool :
-        """Create a new namespace in all languages"""
+    def create_ns ( self, ns: str ) -> bool :
+        """Create a new ns in all lngs"""
 
-        if not namespace.endswith( '.json' ) :
-            namespace = f"{namespace}.json"
+        if not ns.endswith( '.json' ) :
+            ns = f"{ns}.json"
 
-        if not self.root_dir or namespace in self.namespaces :
+        if not self.root_dir or ns in self.ns :
             return False
 
-        # Create namespace file in all languages
-        for lang in self.languages :
-            self._write_file( lang, namespace )
+        # Create ns file in all lngs
+        for lang in self.lngs :
+            self._write_file( lang, ns )
 
-        self.namespaces.add( namespace )
+        self.ns.add( ns )
         return True
 
 
-    def delete_language ( self, language_code: str ) -> bool :
-        """Delete a language and all its namespace files"""
+    def delete_language ( self, lang_code: str ) -> bool :
+        """Delete a language and all its ns files"""
 
-        if not self.root_dir or language_code not in self.languages :
+        if not self.root_dir or lang_code not in self.lngs :
             return False
 
-        lang_dir = os.path.join( self.root_dir, language_code )
+        lang_dir = os.path.join( self.root_dir, lang_code )
         try :
             shutil.rmtree( lang_dir )
-            self.languages.remove( language_code )
+            self.lngs.remove( lang_code )
             return True
         except shutil.Error :
             return False
 
 
-    def delete_namespace ( self, namespace: str ) -> bool :
-        """Delete a namespace from all languages"""
+    def delete_ns ( self, ns: str ) -> bool :
+        """Delete a ns from all lngs"""
 
-        if not self.root_dir or namespace not in self.namespaces :
+        if not self.root_dir or ns not in self.ns :
             return False
 
         success = True
-        for lang in self.languages :
-            file_path = os.path.join( self.root_dir, lang, namespace )
+        for lang in self.lngs :
+            file_path = os.path.join( self.root_dir, lang, ns )
             try :
                 if os.path.exists( file_path ) :
                     os.remove( file_path )
@@ -163,7 +163,7 @@ class TranslationManager :
                 success = False
 
         if success :
-            self.namespaces.remove( namespace )
+            self.ns.remove( ns )
 
         return success
 
@@ -171,31 +171,31 @@ class TranslationManager :
     def rename_language ( self, old_code: str, new_code: str ) -> bool :
         """Rename a language folder"""
 
-        if not self.root_dir or old_code not in self.languages or new_code in self.languages :
+        if not self.root_dir or old_code not in self.lngs or new_code in self.lngs :
             return False
 
         old_path = os.path.join( self.root_dir, old_code )
         new_path = os.path.join( self.root_dir, new_code )
         try :
             os.rename( old_path, new_path )
-            self.languages.remove( old_code )
-            self.languages.add( new_code )
+            self.lngs.remove( old_code )
+            self.lngs.add( new_code )
             return True
         except OSError :
             return False
 
 
-    def rename_namespace ( self, old_name: str, new_name: str ) -> bool :
-        """Rename a namespace in all languages"""
+    def rename_ns ( self, old_name: str, new_name: str ) -> bool :
+        """Rename a ns in all lngs"""
 
-        if not self.root_dir or old_name not in self.namespaces or new_name in self.namespaces :
+        if not self.root_dir or old_name not in self.ns or new_name in self.ns :
             return False
 
         if not new_name.endswith( '.json' ) :
             new_name = f"{new_name}.json"
 
         success = True
-        for lang in self.languages :
+        for lang in self.lngs :
             old_path = os.path.join( self.root_dir, lang, old_name )
             new_path = os.path.join( self.root_dir, lang, new_name )
             try :
@@ -205,19 +205,19 @@ class TranslationManager :
                 success = False
 
         if success :
-            self.namespaces.remove( old_name )
-            self.namespaces.add( new_name )
+            self.ns.remove( old_name )
+            self.ns.add( new_name )
 
         return success
 
 
-    def get_translations ( self, language: str, namespace: str ) -> Dict :
-        """Get translations for a specific language and namespace"""
+    def get_translations ( self, lang: str, ns: str ) -> Dict :
+        """Get translations for a specific language and ns"""
 
-        if not self.root_dir or language not in self.languages or namespace not in self.namespaces :
+        if not self.root_dir or lang not in self.lngs or ns not in self.ns :
             return {}
 
-        file_path = os.path.join( self.root_dir, language, namespace )
+        file_path = os.path.join( self.root_dir, lang, ns )
         if not os.path.exists( file_path ) :
             return {}
 
@@ -228,16 +228,14 @@ class TranslationManager :
             return {}
 
 
-    def save_translations ( self, language: str, namespace: str, translations: Dict ) -> bool :
-        """Save translations for a specific language and namespace"""
+    def save_translations ( self, lang: str, ns: str, data: Dict ) -> bool :
+        """Save translations for a specific language and ns"""
 
-        if not self.root_dir or language not in self.languages or namespace not in self.namespaces :
+        if not self.root_dir or lang not in self.lngs or ns not in self.ns :
             return False
 
         # Sort keys alphabetically
-        sorted_translations = {
-            k: translations[ k ] for k in sorted( translations.keys() )
-        }
+        sorted_data = { k: data[ k ] for k in sorted( data.keys() ) }
 
         # Save translations
-        return self._write_file( language, namespace, sorted_translations )
+        return self._write_file( lang, ns, sorted_data )
