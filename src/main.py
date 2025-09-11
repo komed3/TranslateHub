@@ -8,7 +8,7 @@ import os
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Tuple, Union
 
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout,
@@ -38,7 +38,10 @@ GITHUB_REPO = "https://github.com/komed3/TranslateHub"
 class ConfigDialog ( QDialog ) :
     """Dialog for configuring the application"""
 
-    def __init__ ( self, parent = None, current_dir = None ) :
+    def __init__ (
+        self, parent: Union[ QWidget, None ] = None,
+        current_dir: Union[ str, None ] = None
+    ) :
         """Initialize configuration dialog"""
 
         super().__init__( parent )
@@ -74,7 +77,7 @@ class ConfigDialog ( QDialog ) :
         self.setLayout( self.layout() )
 
 
-    def browse_directory ( self ) :
+    def browse_directory ( self ) -> None :
         """Open file dialog to select root directory"""
 
         directory = QFileDialog.getExistingDirectory(
@@ -86,6 +89,60 @@ class ConfigDialog ( QDialog ) :
             self.dir_input.setText( directory )
 
 
-    def get_root_directory( self ) :
+    def get_root_directory( self ) -> str :
         """Get the selected root directory"""
         return self.dir_input.text()
+
+
+class TranslationKeyDialog ( QDialog ) :
+    """Dialog for adding or editing translation keys"""
+
+    def __init__ (
+        self, parent: Union[ QWidget, None ] = None,
+        key: str = "", value: str = "", edit_mode: bool = False
+    ) :
+        """Initialize translation key dialog"""
+
+        super().__init__( parent )
+        self.setWindowTitle( "Add Translation Key" if not edit_mode else "Edit Translation Key" )
+        self.resize( 400, 200 )
+
+        self.layout = QVBoxLayout() # type: ignore
+
+        # Key input
+        key_layout = QHBoxLayout()
+        self.key_label = QLabel( "Key:" )
+        self.key_input = QLineEdit( key )
+
+        if edit_mode:
+            self.key_input.setReadOnly( True )
+
+        key_layout.addWidget( self.key_label )
+        key_layout.addWidget( self.key_input, 1 )
+        self.layout.addLayout( key_layout ) # type: ignore
+
+        # Value input
+        value_layout = QVBoxLayout()
+        self.value_label = QLabel( "Default Value:" )
+        self.value_input = QTextEdit()
+        self.value_input.setPlainText( value )
+
+        value_layout.addWidget( self.value_label )
+        value_layout.addWidget( self.value_input )
+        self.layout.addLayout( value_layout ) # type: ignore
+
+        # Dialog buttons
+        self.button_box = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok | 
+            QDialogButtonBox.StandardButton.Cancel
+        )
+
+        self.button_box.accepted.connect( self.accept )
+        self.button_box.rejected.connect( self.reject )
+        self.layout.addWidget( self.button_box ) # type: ignore
+        self.setLayout( self.layout ) # type: ignore
+
+
+    def get_key_value ( self ) -> Tuple[ str, str ] :
+        """Get the entered key and value"""
+        return self.key_input.text(), self.value_input.toPlainText()
