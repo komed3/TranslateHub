@@ -3,10 +3,12 @@ TranslateHub - Translation Manager Module
 Handles all operations related to translation files
 """
 
+
 import json
 import os
 import shutil
 from typing import Dict, List, Tuple, Union
+
 
 class TranslationManager :
     """Manages translation files and operations"""
