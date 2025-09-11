@@ -6,12 +6,12 @@ Handles all operations related to translation files
 import json
 import os
 import shutil
-from typing import Dict, List
+from typing import Dict, List, Union
 
 class TranslationManager :
     """Manages translation files and operations"""
 
-    def __init__ ( self, root_dir: ( str | None ) = None ) :
+    def __init__ ( self, root_dir: Union[ str, None ] = None ) :
         """Initialize the translation manager with a root directory"""
 
         self.root_dir = root_dir
@@ -54,7 +54,7 @@ class TranslationManager :
                     self.namespaces.add( file )
 
 
-    def _write_file ( self, lang: str, namespace: str, data: ( object | None ) = None ) -> bool :
+    def _write_file ( self, lang: str, namespace: str, data: Union[ object, None ] = None ) -> bool :
         """Write data to a specific language and namespace file"""
 
         path = os.path.join( self.root_dir or '', lang, namespace )
