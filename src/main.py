@@ -337,5 +337,144 @@ class FilterableListWidget ( QWidget ) :
     def _on_item_selected ( self, current ) :
         """Handle item selection"""
 
-        if current:
+        if current :
             self.item_selected.emit( current )
+
+
+class TranslationEditor ( QWidget ) :
+    """Widget for editing translations"""
+
+    translation_changed = pyqtSignal( str, str, str, str )
+    key_action_requested = pyqtSignal( str, str )
+
+    def __init__ ( self, parent: Union[ QWidget, None ] = None ) :
+        """Initialize translation editor"""
+
+        super().__init__( parent )
+        self.current_lang = None
+        self.current_ns = None
+        self.data = {}
+        self.hide_translated = False
+        self.layout: QVBoxLayout = QVBoxLayout()
+
+        # Options
+        options_layout = QHBoxLayout()
+
+        self.hide_translated_cb = QCheckBox( "Hide Translated Values" )
+        self.hide_translated_cb.toggled.connect( self._toggle_hide_translated )
+
+        options_layout.addWidget( self.hide_translated_cb )
+        options_layout.addStretch()
+        self.layout.addLayout( options_layout )
+
+        # Translation grid
+        self.scroll_area = QScrollArea()
+        self.scroll_area.setWidgetResizable( True )
+        self.scroll_widget = QWidget()
+
+        self.grid_layout = QGridLayout( self.scroll_widget )
+
+        self.scroll_area.setWidget( self.scroll_widget )
+        self.layout.addWidget( self.scroll_area )
+        self.setLayout( self.layout )
+
+
+    def load_translations ( self, lang: str, ns: str, data: Dict[ str, str ] ) -> None :
+        """Load translations into the editor"""
+
+        self.current_lang = lang
+        self.current_ns = ns
+        self.data = data
+        self._refresh_grid()
+
+
+    def _refresh_grid ( self ) -> None :
+        """Refresh the translation grid"""
+
+        # Clear existing widgets
+        while self.grid_layout.count() :
+            item = self.grid_layout.takeAt( 0 )
+            if item and ( widget := item.widget() ) :
+                widget.deleteLater()
+
+        # Add headers
+        self.grid_layout.addWidget( QLabel( "Key" ), 0, 0 )
+        self.grid_layout.addWidget( QLabel( "Translation" ), 0, 1 )
+        self.grid_layout.addWidget( QLabel( "Actions" ), 0, 2 )
+
+        # Add translation rows
+        row = 1
+        for key, value in sorted( self.data.items() ) :
+
+            # Skip translated values if hide_translated is enabled
+            if self.hide_translated and value.strip() :
+                continue
+
+            # Key label
+            key_label = QLabel( key )
+            key_label.setTextInteractionFlags( Qt.TextInteractionFlag.TextSelectableByMouse )
+            key_label.setWordWrap( True )
+
+            # Translation input
+            t_input = QTextEdit()
+            t_input.setPlainText( value )
+            t_input.setProperty( "key", key )
+            t_input.textChanged.connect(
+                lambda input_widget= t_input: self._on_translation_changed( input_widget )
+            )
+
+            # Actions
+            actions_layout = QHBoxLayout()
+
+            rename_btn = QPushButton( "Rename" )
+            rename_btn.setProperty( "key", key )
+            rename_btn.clicked.connect(
+                lambda checked, btn= rename_btn: self.key_action_requested.emit(
+                    "rename", btn.property( "key" )
+                )
+            )
+
+            delete_btn = QPushButton( "Delete" )
+            delete_btn.setProperty( "key", key )
+            delete_btn.clicked.connect(
+                lambda checked, btn= delete_btn: self.key_action_requested.emit(
+                    "delete", btn.property( "key" )
+                )
+            )
+
+            actions_layout.addWidget( rename_btn )
+            actions_layout.addWidget( delete_btn )
+
+            actions_widget = QWidget()
+            actions_widget.setLayout( actions_layout )
+
+            self.grid_layout.addWidget( key_label, row, 0 )
+            self.grid_layout.addWidget( t_input, row, 1 )
+            self.grid_layout.addWidget( actions_widget, row, 2 )
+            row += 1
+
+
+    def _on_translation_changed ( self, input_widget: QTextEdit ) -> None :
+        """Handle translation text changes"""
+
+        if not self.current_lang or not self.current_ns :
+            return
+
+        key = input_widget.property( "key" )
+        value = input_widget.toPlainText()
+
+        if key in self.data :
+            self.data[ key ] = value
+            self.translation_changed.emit(
+                self.current_lang,
+                self.current_ns,
+                key, value
+            )
+
+
+    def _toggle_hide_translated ( self, checked: bool ) -> None :
+        """Toggle hiding of translated values"""
+
+        self.hide_translated = checked
+        if self.current_lang and self.current_ns :
+            self._refresh_grid()
