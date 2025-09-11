@@ -6,12 +6,12 @@ Handles all operations related to translation files
 import json
 import os
 import shutil
-from typing import List
+from typing import Dict, List
 
 class TranslationManager :
     """Manages translation files and operations"""
 
-    def __init__ ( self, root_dir: str | None = None ) :
+    def __init__ ( self, root_dir: ( str | None ) = None ) :
         """Initialize the translation manager with a root directory"""
 
         self.root_dir = root_dir
@@ -54,13 +54,17 @@ class TranslationManager :
                     self.namespaces.add( file )
 
 
-    def _write_file ( self, lang: str, namespace: str, data: object | None = None ) -> None :
+    def _write_file ( self, lang: str, namespace: str, data: ( object | None ) = None ) -> bool :
         """Write data to a specific language and namespace file"""
 
         path = os.path.join( self.root_dir or '', lang, namespace )
-        with open( path, 'w', encoding= 'utf-8' ) as nf :
-            json.dump( data or {}, nf, ensure_ascii= False, indent= 2 )
-            nf.write( '\n\n' )
+        try :
+            with open( path, 'w', encoding= 'utf-8' ) as f :
+                json.dump( data or {}, f, ensure_ascii= False, indent= 2 )
+                f.write( '\n\n' )
+            return True
+        except OSError :
+            return False
 
 
     def get_languages ( self ) -> List[ str ] :
@@ -205,3 +209,35 @@ class TranslationManager :
             self.namespaces.add( new_name )
 
         return success
+
+
+    def get_translations ( self, language: str, namespace: str ) -> Dict :
+        """Get translations for a specific language and namespace"""
+
+        if not self.root_dir or language not in self.languages or namespace not in self.namespaces :
+            return {}
+
+        file_path = os.path.join( self.root_dir, language, namespace )
+        if not os.path.exists( file_path ) :
+            return {}
+
+        try :
+            with open( file_path, 'r', encoding= 'utf-8' ) as f :
+                return json.load( f )
+        except json.JSONDecodeError :
+            return {}
+
+
+    def save_translations ( self, language: str, namespace: str, translations: Dict ) -> bool :
+        """Save translations for a specific language and namespace"""
+
+        if not self.root_dir or language not in self.languages or namespace not in self.namespaces :
+            return False
+
+        # Sort keys alphabetically
+        sorted_translations = {
+            k: translations[ k ] for k in sorted( translations.keys() )
+        }
+
+        # Save translations
+        return self._write_file( language, namespace, sorted_translations )
