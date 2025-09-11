@@ -69,12 +69,12 @@ class TranslationManager :
             return False
 
 
-    def get_lngs ( self ) -> List[ str ] :
+    def get_languages ( self ) -> List[ str ] :
         """Get all available lngs"""
         return sorted( list( self.lngs ) )
 
 
-    def get_nss ( self ) -> List[ str ] :
+    def get_namespaces ( self ) -> List[ str ] :
         """Get all available nss"""
         return sorted( list( self.ns ) )
 
