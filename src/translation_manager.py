@@ -97,14 +97,14 @@ class TranslationManager :
 
                         # Create empty translations with the same keys
                         # If template file is invalid, create empty file
-                        try:
+                        try :
                             empty_data = { k: "" for k in json.load( f ).keys() }
                             self._write_file( language_code, namespace, empty_data )
                         except json.JSONDecodeError :
                             self._write_file( language_code, namespace )
 
             # If no languages exist yet, create empty file
-            else:
+            else :
                 with open( os.path.join( lang_dir, namespace ), 'w', encoding= 'utf-8' ) as f :
                     json.dump( {}, f, ensure_ascii= False, indent= 2 )
 
@@ -115,7 +115,7 @@ class TranslationManager :
     def create_namespace ( self, namespace: str ) -> bool :
         """Create a new namespace in all languages"""
 
-        if not namespace.endswith( '.json' ):
+        if not namespace.endswith( '.json' ) :
             namespace = f"{namespace}.json"
 
         if not self.root_dir or namespace in self.namespaces :
@@ -127,3 +127,39 @@ class TranslationManager :
 
         self.namespaces.add( namespace )
         return True
+
+
+    def delete_language ( self, language_code: str ) -> bool :
+        """Delete a language and all its namespace files"""
+
+        if not self.root_dir or language_code not in self.languages :
+            return False
+
+        lang_dir = os.path.join( self.root_dir, language_code )
+        try :
+            shutil.rmtree( lang_dir )
+            self.languages.remove( language_code )
+            return True
+        except Exception :
+            return False
+
+
+    def delete_namespace ( self, namespace: str ) -> bool :
+        """Delete a namespace from all languages"""
+
+        if not self.root_dir or namespace not in self.namespaces :
+            return False
+
+        success = True
+        for lang in self.languages :
+            file_path = os.path.join( self.root_dir, lang, namespace )
+            try :
+                if os.path.exists( file_path ) :
+                    os.remove( file_path )
+            except Exception :
+                success = False
+
+        if success :
+            self.namespaces.remove( namespace )
+
+        return success
