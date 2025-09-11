@@ -388,3 +388,37 @@ class TranslationManager :
             progress[ lang ] = lang_progress
 
         return progress
+
+
+    def search ( self, q: str, cs: bool = False ) -> Dict[ str, Dict[ str, Dict[ str, str ] ] ] :
+        """
+        Search for translations containing the query string
+        Returns a nested dictionary with languages, namespaces, and keys as keys
+        and the matching translation values
+        """
+
+        if not self.root_dir or not q:
+            return {}
+
+        results = {}
+        for lang in self.lngs :
+            lang_results = {}
+            for ns in self.ns :
+                data = self.get_translations( lang, ns )
+                matches = {}
+
+                for key, value in data.items() :
+                    if cs :
+                        if q in key or q in value :
+                            matches[ key ] = value
+                    else :
+                        if q.lower() in key.lower() or ( value and q.lower() in value.lower() ) :
+                            matches[ key ] = value
+
+                if matches :
+                    lang_results[ ns ] = matches
+
+            if lang_results :
+                results[ lang ] = lang_results
+
+        return results
