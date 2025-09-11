@@ -5,9 +5,8 @@ Handles all operations related to translation files
 
 import json
 import os
-from pathlib import Path
 import shutil
-from typing import Dict, List, Tuple
+from typing import List
 
 class TranslationManager :
     """Manages translation files and operations"""
@@ -140,7 +139,7 @@ class TranslationManager :
             shutil.rmtree( lang_dir )
             self.languages.remove( language_code )
             return True
-        except Exception :
+        except shutil.Error :
             return False
 
 
@@ -156,7 +155,7 @@ class TranslationManager :
             try :
                 if os.path.exists( file_path ) :
                     os.remove( file_path )
-            except Exception :
+            except OSError :
                 success = False
 
         if success :
@@ -178,7 +177,7 @@ class TranslationManager :
             self.languages.remove( old_code )
             self.languages.add( new_code )
             return True
-        except Exception :
+        except OSError :
             return False
 
 
@@ -198,7 +197,7 @@ class TranslationManager :
             try :
                 if os.path.exists( old_path ) :
                     os.rename( old_path, new_path )
-            except Exception :
+            except OSError :
                 success = False
 
         if success :
