@@ -239,3 +239,61 @@ class TranslationManager :
 
         # Save translations
         return self._write_file( lang, ns, sorted_data )
+
+
+    def add_translation_key ( self, ns: str, key: str, default: str = "" ) -> bool :
+        """Add a new translation key to a namespace in all languages"""
+
+        if not self.root_dir or ns not in self.ns :
+            return False
+
+        success = True
+        for lang in self.lngs :
+            data = self.get_translations ( lang, ns )
+            if key not in data :
+                data[ key ] = default
+                if not self.save_translations( lang, ns, data ) :
+                    success = False
+
+        return success
+
+
+    def delete_translation_key ( self, ns: str, key: str ) -> bool :
+        """Delete a translation key from a namespace in all languages"""
+
+        if not self.root_dir or ns not in self.ns :
+            return False
+
+        success = True
+        for lang in self.lngs :
+            data = self.get_translations( lang, ns )
+            if key in data :
+                del data[ key ]
+                if not self.save_translations( lang, ns, data ) :
+                    success = False
+
+        return success
+
+
+    def rename_translation_key ( self, ns: str, old_key: str, new_key: str ) -> bool :
+        """Rename a translation key in a namespace across all languages"""
+
+        if not self.root_dir or ns not in self.ns :
+            return False
+
+        # Check if new key already exists in any language
+        for lang in self.lngs :
+            data = self.get_translations( lang, ns )
+            if new_key in data :
+                return False  # Don't overwrite existing keys
+
+        success = True
+        for lang in self.lngs :
+            data = self.get_translations( lang, ns )
+            if old_key in data :
+                data[ new_key ] = data[ old_key ]
+                del data[ old_key ]
+                if not self.save_translations( lang, ns, data ) :
+                    success = False
+
+        return success
