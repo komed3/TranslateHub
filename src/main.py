@@ -257,8 +257,8 @@ class AboutDialog ( QDialog ) :
 class FilterableListWidget ( QWidget ) :
     """List widget with search/filter functionality"""
 
-    item_selected = pyqtSignal ( QListWidgetItem )
-    
+    item_selected = pyqtSignal( QListWidgetItem )
+
     def __init__ ( self, parent: Union[ QWidget, None ] = None ) :
         """Initialize filterable list widget"""
 
@@ -290,9 +290,8 @@ class FilterableListWidget ( QWidget ) :
     def add_item ( self, text: str ) -> None :
         """Add an item to the list"""
 
-        item = QListWidgetItem( text )
-        self.list_widget.addItem( item )
-        self.all_items.append( item )
+        self.all_items.append( text )
+        self._apply_filter( self.filter_input.text() )
 
 
     def clear ( self ) -> None :
@@ -306,9 +305,8 @@ class FilterableListWidget ( QWidget ) :
         """Set the list of items"""
 
         self.clear()
-        for item in items :
-            self.add_item( item )
-
+        for item_text in items :
+            self.add_item( item_text )
 
     def current_item ( self ) -> Union[ QListWidgetItem, None ] :
         """Get the current selected item"""
@@ -325,26 +323,19 @@ class FilterableListWidget ( QWidget ) :
         self.list_widget.customContextMenuRequested.connect( handler )
 
 
-    def _apply_filter ( self, filter_text ) -> None :
+    def _apply_filter ( self, filter_text: str = "" ) -> None :
         """Apply filter to the list"""
 
         self.list_widget.clear()
+        filter_text = filter_text.lower()
 
-        # Show all items
-        if not filter_text :
-            for item in self.all_items:
-                self.list_widget.addItem( item.clone() )
-
-        # Show only matching items
-        else :
-            filter_text = filter_text.lower()
-            for item in self.all_items :
-                if filter_text in item.text().lower() :
-                    self.list_widget.addItem( item.clone() )
+        for text in self.all_items :
+            if not filter_text or filter_text in text.lower() :
+                self.list_widget.addItem( QListWidgetItem( text ) )
 
 
-    def _on_item_selected ( self, current ) -> None :
+    def _on_item_selected ( self, current ) :
         """Handle item selection"""
 
-        if current :
+        if current:
             self.item_selected.emit( current )
