@@ -190,6 +190,10 @@ class MainWindow ( QMainWindow ) :
         self.save_all_action.setShortcut( "Ctrl+S" )
         self.save_all_action.triggered.connect( self._save_all )
 
+        self.close_action = QAction( "&Close Project", self )
+        self.close_action.setShortcut( "Ctrl+X" )
+        self.close_action.triggered.connect( self._close_project )
+
         self.exit_action = QAction( "E&xit", self )
         self.exit_action.setShortcut( "Ctrl+Q" )
         self.exit_action.triggered.connect( self.close )
@@ -246,6 +250,7 @@ class MainWindow ( QMainWindow ) :
         self.file_menu.addAction( self.open_action )
         self.file_menu.addAction( self.save_all_action )
         self.file_menu.addSeparator()
+        self.file_menu.addAction( self.close_action )
         self.file_menu.addAction( self.exit_action )
 
         # Edit menu
@@ -314,6 +319,13 @@ class MainWindow ( QMainWindow ) :
                     self, "Invalid Directory",
                     "The selected directory is not valid."
                 )
+
+
+    def _close_project ( self ) -> None :
+        """Close the current project"""
+
+        self.settings.remove( "last_directory" )
+        self.close()
 
 
     def _refresh_ui ( self ) -> None :
