@@ -1,0 +1,10 @@
+[MESSAGES CONTROL]
+
+disable=
+    too-many-lines,
+    too-few-public-methods,
+    too-many-instance-attributes,
+    too-many-locals,
+    too-many-statements,
+    invalid-name,
+    import-error

@@ -230,7 +230,7 @@ class AboutDialog ( QDialog ) :
         copyright_label = QLabel( f"© {YEAR} komed3 (Paul Köhler)" )
         copyright_label.setAlignment( Qt.AlignmentFlag.AlignCenter )
         self.layout.addWidget( copyright_label )
-        
+
         # GitHub link
         github_button = QPushButton( "Visit GitHub Repository" )
         github_button.clicked.connect( lambda: QDesktopServices.openUrl( QUrl( GITHUB_REPO ) ) )
@@ -753,12 +753,12 @@ class MainWindow ( QMainWindow ) :
 
         editor_header.addWidget( self.editor_title, 1 )
         editor_header.addWidget( self.add_key_button )
-        
+
         # Translation editor
         self.t_editor = TranslationEditor()
         self.t_editor.translation_changed.connect( self._on_translation_changed )
         self.t_editor.key_action_requested.connect( self._on_key_action_requested )
-        
+
         right_layout.addLayout( editor_header )
         right_layout.addWidget( self.t_editor, 1 )
         self.right_panel.setLayout( right_layout )
@@ -830,7 +830,7 @@ class MainWindow ( QMainWindow ) :
         self.file_menu.addAction( self.save_all_action )
         self.file_menu.addSeparator()
         self.file_menu.addAction( self.exit_action )
-        
+
         # Edit menu
         self.edit_menu = self._new_menu( "&Edit" )
         self.edit_menu.addAction( self.sync_action )
@@ -1003,8 +1003,8 @@ class MainWindow ( QMainWindow ) :
         """Auto-save current translations"""
 
         if (
-            self.t_editor.current_lang and 
-            self.t_editor.current_ns and 
+            self.t_editor.current_lang and
+            self.t_editor.current_ns and
             self.t_editor.data
         ) :
             self.t_manager.save_translations (
@@ -1343,8 +1343,8 @@ class MainWindow ( QMainWindow ) :
 
     def closeEvent ( self, event ) -> None :
         """Handle window close event"""
-        """Save current translations before closing"""
 
+        # Save current translations before closing
         self._save_all()
         event.accept()
 
