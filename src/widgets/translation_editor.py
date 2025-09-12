@@ -71,6 +71,15 @@ class TranslationEditor ( QWidget ) :
         self._refresh_grid()
 
 
+    def reset_filter ( self ) -> None :
+        """Reset the filter input"""
+
+        self.hide_translated_cb.setChecked( False )
+        self.filter_input.setText( "" )
+
+        self._refresh_grid()
+
+
     def _refresh_grid ( self ) -> None :
         """Refresh the translation grid"""
 

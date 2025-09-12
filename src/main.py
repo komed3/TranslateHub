@@ -178,13 +178,17 @@ class MainWindow ( QMainWindow ) :
         """Create application actions"""
 
         # File actions
-        self.open_action = QAction( "&Open Project...", self )
+        self.open_action = QAction( "&Open Project", self )
         self.open_action.setShortcut( "Ctrl+O" )
         self.open_action.triggered.connect( self._show_config_dialog )
 
         self.save_all_action = QAction( "&Save All", self )
         self.save_all_action.setShortcut( "Ctrl+S" )
         self.save_all_action.triggered.connect( self._save_all )
+
+        self.reset_filter_action = QAction( "&Reset Filter", self )
+        self.reset_filter_action.setShortcut( "Ctrl+R" )
+        self.reset_filter_action.triggered.connect( self._reset_filter )
 
         self.exit_action = QAction( "E&xit", self )
         self.exit_action.setShortcut( "Ctrl+Q" )
@@ -230,6 +234,7 @@ class MainWindow ( QMainWindow ) :
         self.file_menu = self._new_menu( "&File" )
         self.file_menu.addAction( self.open_action )
         self.file_menu.addAction( self.save_all_action )
+        self.file_menu.addAction( self.reset_filter_action )
         self.file_menu.addSeparator()
         self.file_menu.addAction( self.exit_action )
 
@@ -402,7 +407,7 @@ class MainWindow ( QMainWindow ) :
             # Auto-save timer will handle periodic saving
 
 
-    def _auto_save ( self ) :
+    def _auto_save ( self ) -> None :
         """Auto-save current translations"""
 
         if (
@@ -418,12 +423,22 @@ class MainWindow ( QMainWindow ) :
             self._update_progress_bars()
 
 
-    def _save_all ( self ) :
+    def _save_all ( self ) -> None :
         """Save all translations"""
 
         self._auto_save()
         self._update_progress_bars()
         self.status_label.setText( "All translations saved" )
+
+
+    def _reset_filter ( self ) -> None :
+        """Reset filters on language/namespace lists and editor"""
+
+        self.t_editor.reset_filter()
+        self.lang_list.filter_input.setText( "" )
+        self.ns_list.filter_input.setText( "" )
+
+        self._refresh_ui()
 
 
     def _add_language ( self ) -> None :
@@ -703,8 +718,8 @@ class MainWindow ( QMainWindow ) :
     def _select_lang_ns ( self, lang: str, ns: str ) -> None :
         """Select a language and namespace from statistics dialog"""
 
-        self.lang_list.filter_input.setText( "" )
-        self.ns_list.filter_input.setText( "" )
+        # Reset filters
+        self._reset_filter()
 
         # Find and select the language
         for i in range( self.lang_list.list_widget.count() ) :
