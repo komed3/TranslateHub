@@ -8,8 +8,8 @@ from typing import Dict, Union
 
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import (
-    QCheckBox, QGridLayout, QHBoxLayout, QLabel, QPushButton,
-    QScrollArea, QTextEdit, QVBoxLayout, QWidget
+    QCheckBox, QGridLayout, QHBoxLayout, QLabel, QLineEdit,
+    QPushButton, QScrollArea, QTextEdit, QVBoxLayout, QWidget
 )
 
 
@@ -38,6 +38,14 @@ class TranslationEditor ( QWidget ) :
 
         options_layout.addWidget( self.hide_translated_cb )
         options_layout.addStretch()
+
+        # Filter input
+        self.filter_input = QLineEdit()
+        self.filter_input.setPlaceholderText( "Filter key or value ..." )
+        self.filter_input.textChanged.connect( self._refresh_grid )
+
+        options_layout.addWidget( self.filter_input )
+
         self.layout.addLayout( options_layout )
 
         # Translation grid
@@ -66,6 +74,8 @@ class TranslationEditor ( QWidget ) :
     def _refresh_grid ( self ) -> None :
         """Refresh the translation grid"""
 
+        q = self.filter_input.text().lower().strip()
+
         # Clear existing widgets
         while self.grid_layout.count() :
             item = self.grid_layout.takeAt( 0 )
@@ -82,7 +92,9 @@ class TranslationEditor ( QWidget ) :
         for key, value in sorted( self.data.items() ) :
 
             # Skip translated values if hide_translated is enabled
-            if self.hide_translated and value.strip() :
+            if ( ( self.hide_translated and value.strip() ) or (
+                q and q not in key.lower() and q not in value.lower()
+            ) ) :
                 continue
 
             # Key label
