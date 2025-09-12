@@ -4,9 +4,9 @@ Dialog to check for application updates via GitHub API
 """
 
 
-import requests
 from typing import Union
 
+import requests
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import (
     QDialog, QDialogButtonBox, QLabel, QVBoxLayout, QWidget
