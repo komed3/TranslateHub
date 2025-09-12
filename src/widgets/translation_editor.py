@@ -116,7 +116,7 @@ class TranslationEditor ( QWidget ) :
 
             # Actions
             actions_widget = QWidget()
-            actions_layout = QHBoxLayout()
+            actions_layout = QVBoxLayout()
 
             rename_btn = QPushButton( "Rename" )
             rename_btn.setProperty( "key", key )
