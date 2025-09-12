@@ -8,9 +8,11 @@ from pathlib import Path
 from typing import Union
 
 from PyQt6.QtWidgets import (
-    QDialog, QDialogButtonBox, QFileDialog, QHBoxLayout, QLabel,
-    QLineEdit, QPushButton, QVBoxLayout, QWidget
+    QDialog, QFileDialog, QHBoxLayout, QLabel, QLineEdit,
+    QPushButton, QVBoxLayout, QWidget
 )
+
+from ._button_box import ok_close
 
 
 class ConfigDialog ( QDialog ) :
@@ -45,14 +47,7 @@ class ConfigDialog ( QDialog ) :
         self.layout.addLayout( dir_layout )
 
         # Dialog buttons
-        self.button_box = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Ok |
-            QDialogButtonBox.StandardButton.Cancel
-        )
-
-        self.button_box.accepted.connect( self.accept )
-        self.button_box.rejected.connect( self.reject )
-
+        self.button_box = ok_close( self.accept, self.reject )
         self.layout.addWidget( self.button_box )
 
         self.setLayout( self.layout )

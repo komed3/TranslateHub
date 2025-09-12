@@ -4,6 +4,7 @@ disable=
     import-error,
     invalid-name,
     no-name-in-module,
+    relative-beyond-top-level,
     too-few-public-methods,
     too-many-instance-attributes,
     too-many-locals,

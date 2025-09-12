@@ -7,9 +7,11 @@ Dialog for renaming translation keys
 from typing import Union
 
 from PyQt6.QtWidgets import (
-    QDialog, QDialogButtonBox, QLabel, QLineEdit, QHBoxLayout,
-    QVBoxLayout, QWidget
+    QDialog, QLabel, QLineEdit, QHBoxLayout, QVBoxLayout,
+    QWidget
 )
+
+from ._button_box import ok_close
 
 
 class RenameKeyDialog ( QDialog ) :
@@ -46,14 +48,7 @@ class RenameKeyDialog ( QDialog ) :
         self.layout.addLayout( new_key_layout )
 
         # Dialog buttons
-        self.button_box = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Ok |
-            QDialogButtonBox.StandardButton.Cancel
-        )
-
-        self.button_box.accepted.connect( self.accept )
-        self.button_box.rejected.connect( self.reject )
-
+        self.button_box = ok_close( self.accept, self.reject )
         self.layout.addWidget( self.button_box )
 
         self.setLayout( self.layout )
