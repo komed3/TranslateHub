@@ -24,11 +24,13 @@ from .widgets.rename_key_dialog import RenameKeyDialog
 from .widgets.statistics_dialog import StatisticsDialog
 from .widgets.translation_editor import TranslationEditor
 from .widgets.translation_key_dialog import TranslationKeyDialog
+from .widgets.update_dialog import UpdateDialog
 
 
 # Application version
 VERSION = "0.1.0"
-GITHUB_REPO = "https://github.com/komed3/TranslateHub"
+GITHUB_OWNER = "komed3"
+GITHUB_REPO = "TranslateHub"
 YEAR = "2025"
 
 
@@ -739,26 +741,14 @@ class MainWindow ( QMainWindow ) :
     def _check_updates ( self ) -> None :
         """Check for updates"""
 
-        try :
-            # This is a placeholder for actual update checking logic
-            # In a real application, you would connect to a server or GitHub API
-            QMessageBox.information(
-                self, "Check for Updates",
-                f"You are running TranslateHub version {VERSION}.\n\n"
-                "This is the latest version available."
-            )
-
-        except RuntimeError as e :
-            QMessageBox.warning(
-                self, "Update Check Failed",
-                f"Could not check for updates: {str( e )}"
-            )
+        dialog = UpdateDialog( VERSION, GITHUB_OWNER, GITHUB_REPO, self )
+        dialog.exec()
 
 
     def _show_about_dialog ( self ) -> None :
         """Show about dialog"""
 
-        dialog = AboutDialog( VERSION, YEAR, GITHUB_REPO, self )
+        dialog = AboutDialog( VERSION, YEAR, GITHUB_OWNER, GITHUB_REPO, self )
         dialog.exec()
 
 

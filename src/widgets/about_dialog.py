@@ -18,7 +18,7 @@ class AboutDialog ( QDialog ) :
     """About dialog showing application information"""
 
     def __init__ (
-        self, version: str, year: str, gh: str,
+        self, version: str, year: str, gh_owner: str, gh_repo: str,
         parent: Union[ QWidget, None ] = None
     ) :
         """Initialize about dialog"""
@@ -53,7 +53,9 @@ class AboutDialog ( QDialog ) :
 
         # GitHub link
         github_button = QPushButton( "Visit GitHub Repository" )
-        github_button.clicked.connect( lambda: QDesktopServices.openUrl( QUrl( gh ) ) )
+        github_button.clicked.connect( lambda: QDesktopServices.openUrl( QUrl(
+            f"https://github.com/{gh_owner}/{gh_repo}"
+        ) ) )
         self.layout.addWidget( github_button )
 
         self.layout.addSpacing( 20 )
