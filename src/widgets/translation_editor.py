@@ -82,11 +82,6 @@ class TranslationEditor ( QWidget ) :
             if item and ( widget := item.widget() ) :
                 widget.deleteLater()
 
-        # Add headers
-        self.grid_layout.addWidget( QLabel( "Key" ), 0, 0 )
-        self.grid_layout.addWidget( QLabel( "Translation" ), 0, 1 )
-        self.grid_layout.addWidget( QLabel( "Actions" ), 0, 2 )
-
         # Add translation rows
         row = 1
         for key, value in sorted( self.data.items() ) :
@@ -139,6 +134,12 @@ class TranslationEditor ( QWidget ) :
             self.grid_layout.addWidget( t_input, row, 1 )
             self.grid_layout.addWidget( actions_widget, row, 2 )
             row += 1
+
+        # Add headers if there are rows
+        if row > 1 :
+            self.grid_layout.addWidget( QLabel( "Key" ), 0, 0 )
+            self.grid_layout.addWidget( QLabel( "Translation" ), 0, 1 )
+            self.grid_layout.addWidget( QLabel( "Actions" ), 0, 2 )
 
 
     def _on_translation_changed ( self, input_widget: QTextEdit ) -> None :
