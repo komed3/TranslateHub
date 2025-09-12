@@ -1347,3 +1347,26 @@ class MainWindow ( QMainWindow ) :
 
         self._save_all()
         event.accept()
+
+
+def main () :
+    """Main application entry point"""
+
+    app = QApplication( sys.argv )
+
+    # Use Fusion style for consistent cross-platform look
+    app.setStyle( 'Fusion' )
+
+    # Set application information
+    app.setApplicationName( "TranslateHub" )
+    app.setApplicationVersion( VERSION )
+    app.setOrganizationName( "komed3 (Paul Köhler)" )
+
+    window = MainWindow()
+    window.show()
+
+    sys.exit( app.exec() )
+
+
+if __name__ == "__main__" :
+    main()
