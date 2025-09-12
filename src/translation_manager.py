@@ -117,7 +117,7 @@ class TranslationManager :
         return True
 
 
-    def create_ns ( self, ns: str ) -> bool :
+    def create_namespace ( self, ns: str ) -> bool :
         """Create a new ns in all lngs"""
 
         if not ns.endswith( '.json' ) :
@@ -149,7 +149,7 @@ class TranslationManager :
             return False
 
 
-    def delete_ns ( self, ns: str ) -> bool :
+    def delete_namespace ( self, ns: str ) -> bool :
         """Delete a ns from all lngs"""
 
         if not self.root_dir or ns not in self.ns :
@@ -187,7 +187,7 @@ class TranslationManager :
             return False
 
 
-    def rename_ns ( self, old_name: str, new_name: str ) -> bool :
+    def rename_namespace ( self, old_name: str, new_name: str ) -> bool :
         """Rename a ns in all lngs"""
 
         if not self.root_dir or old_name not in self.ns or new_name in self.ns :
