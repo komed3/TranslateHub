@@ -6,25 +6,15 @@ Cross-platform translation management tool for i18n projects
 
 import os
 import sys
-from pathlib import Path
-from typing import cast, Dict, List, Tuple, Union
+from typing import cast
 
+from PyQt6.QtCore import Qt, QSettings, QSize, QTimer, QUrl
+from PyQt6.QtGui import QAction, QDesktopServices, QFont
 from PyQt6.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QVBoxLayout,
-    QHBoxLayout, QLabel, QPushButton, QLineEdit, QTextEdit,
-    QListWidget, QListWidgetItem, QSplitter, QDialog,
-    QDialogButtonBox, QFileDialog, QMessageBox, QProgressBar,
-    QMenu, QToolBar, QStatusBar, QInputDialog, QGridLayout,
-    QScrollArea, QCheckBox, QTableWidget, QTableWidgetItem,
-    QAbstractItemView
+    QApplication, QHBoxLayout, QInputDialog, QLabel, QListWidgetItem,
+    QMessageBox, QMainWindow, QMenu, QProgressBar, QPushButton,
+    QStatusBar, QSplitter, QToolBar, QVBoxLayout, QWidget
 )
-
-from PyQt6.QtCore import (
-    Qt, QSize, QSettings, pyqtSignal, QTimer, QUrl,
-    QT_VERSION_STR, PYQT_VERSION_STR
-)
-
-from PyQt6.QtGui import QAction, QFont, QColor, QDesktopServices
 
 from .translation_manager import TranslationManager
 from .widgets.about_dialog import AboutDialog
@@ -339,9 +329,8 @@ class MainWindow ( QMainWindow ) :
         """Update progress bars based on current selection"""
 
         # Language progress
-        if self.lang_list.current_item() :
-            lang = cast( QListWidgetItem, self.lang_list.current_item() ).text()
-            progress = self.t_manager.get_language_progress( lang )
+        if ( item := self.lang_list.current_item() ) :
+            progress = self.t_manager.get_language_progress( item.text() )
             self.language_progress.setMaximum( progress[ 1 ] )
             self.language_progress.setValue( progress[ 0 ] )
         else :
@@ -349,11 +338,11 @@ class MainWindow ( QMainWindow ) :
             self.language_progress.setValue( 0 )
 
         # Namespace progress
-        if self.ns_list.current_item() :
-            ns = cast( QListWidgetItem, self.ns_list.current_item() ).text()
+        if ( ns_item := self.ns_list.current_item() ) :
+            ns = ns_item.text()
 
-            if self.lang_list.current_item() :
-                lang = cast( QListWidgetItem, self.lang_list.current_item() ).text()
+            if ( lang_item := self.lang_list.current_item() ) :
+                lang = lang_item.text()
                 progress = self.t_manager.get_namespace_progress( ns )
 
                 if lang in progress :
@@ -391,10 +380,10 @@ class MainWindow ( QMainWindow ) :
             self.add_key_button.setEnabled( False )
             return
 
-        lang = cast( QListWidgetItem, self.lang_list.current_item() ).text()
-        ns = cast( QListWidgetItem, self.ns_list.current_item() ).text()
-
+        lang = self.lang_list.current_item_safe().text()
+        ns = self.ns_list.current_item_safe().text()
         translations = self.t_manager.get_translations( lang, ns )
+
         self.editor_title.setText( f"{lang} - {ns}" )
         self.t_editor.load_translations( lang, ns, translations )
         self.add_key_button.setEnabled( True )
@@ -404,7 +393,9 @@ class MainWindow ( QMainWindow ) :
 
     def _on_translation_changed ( self, lang: str, ns: str, key: str, value: str ) -> None :
         """Handle translation changes"""
+
         translations = self.t_manager.get_translations( lang, ns )
+
         if key in translations :
             translations[ key ] = value
             # We don't save immediately to avoid excessive disk I/O
@@ -479,10 +470,10 @@ class MainWindow ( QMainWindow ) :
     def _show_language_context_menu ( self, position ) -> None :
         """Show context menu for language list"""
 
-        if not self.lang_list.current_item() :
+        if not ( item := self.lang_list.current_item() ) :
             return
 
-        lang = cast( QListWidgetItem, self.lang_list.current_item() ).text()
+        lang = item.text()
 
         menu = QMenu()
         rename_action = menu.addAction( "Rename" )
@@ -499,10 +490,10 @@ class MainWindow ( QMainWindow ) :
     def _show_namespace_context_menu ( self, position ) -> None :
         """Show context menu for namespace list"""
 
-        if not self.ns_list.current_item() :
+        if not ( item := self.ns_list.current_item() ) :
             return
 
-        ns = cast( QListWidgetItem, self.ns_list.current_item() ).text()
+        ns = item.text()
 
         menu = QMenu()
         rename_action = menu.addAction( "Rename" )
@@ -602,12 +593,12 @@ class MainWindow ( QMainWindow ) :
     def _add_translation_key ( self ) -> None :
         """Add a new translation key"""
 
-        if not self.ns_list.current_item() :
+        if not ( item := self.ns_list.current_item() ) :
             return
 
-        ns = cast( QListWidgetItem, self.ns_list.current_item() ).text()
-        dialog = TranslationKeyDialog( self )
+        ns = item.text()
 
+        dialog = TranslationKeyDialog( self )
         if dialog.exec() :
             key, value = dialog.get_key_value()
 
@@ -625,10 +616,10 @@ class MainWindow ( QMainWindow ) :
     def _on_key_action_requested ( self, action: str, key: str ) -> None :
         """Handle key action requests from the editor"""
 
-        if not self.ns_list.current_item() :
+        if not ( item := self.ns_list.current_item() ) :
             return
 
-        ns = cast( QListWidgetItem, self.ns_list.current_item() ).text()
+        ns = item.text()
 
         if action == "rename" :
             self._rename_translation_key( ns, key )

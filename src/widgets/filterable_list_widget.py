@@ -4,7 +4,7 @@ List widget with search / filter functionality
 """
 
 
-from typing import Union
+from typing import cast, Union
 
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import (
@@ -63,6 +63,11 @@ class FilterableListWidget ( QWidget ) :
     def current_item ( self ) -> Union[ QListWidgetItem, None ] :
         """Get the current selected item"""
         return self.list_widget.currentItem()
+
+
+    def current_item_safe ( self ) -> QListWidgetItem :
+        """Get the current selected item, guaranteed to be not None"""
+        return cast( QListWidgetItem, self.list_widget.currentItem() )
 
 
     def set_context_menu_policy ( self, policy ) -> None :

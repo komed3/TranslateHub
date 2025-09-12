@@ -6,6 +6,5 @@ disable=
     no-name-in-module,
     too-few-public-methods,
     too-many-instance-attributes,
-    too-many-lines,
     too-many-locals,
     too-many-statements
