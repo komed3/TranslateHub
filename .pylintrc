@@ -7,5 +7,7 @@ disable=
     relative-beyond-top-level,
     too-few-public-methods,
     too-many-instance-attributes,
+    too-many-arguments,
     too-many-locals,
+    too-many-positional-arguments,
     too-many-statements
