@@ -22,6 +22,7 @@ from .widgets.config_dialog import ConfigDialog
 from .widgets.filterable_list_widget import FilterableListWidget
 from .widgets.missing_translations_dialog import MissingTranslationsDialog
 from .widgets.rename_key_dialog import RenameKeyDialog
+from .widgets.search_dialog import SearchDialog
 from .widgets.statistics_dialog import StatisticsDialog
 from .widgets.translation_editor import TranslationEditor
 from .widgets.translation_key_dialog import TranslationKeyDialog
@@ -208,6 +209,10 @@ class MainWindow ( QMainWindow ) :
         self.stats_action = QAction( "&Statistics", self )
         self.stats_action.triggered.connect( self._show_statistics )
 
+        self.search_action = QAction( "Search", self )
+        self.search_action.setShortcut( "F6" )
+        self.search_action.triggered.connect( self._searching )
+
         # Help actions
         self.check_updates_action = QAction( "Check for &Updates", self )
         self.check_updates_action.triggered.connect( self._check_updates )
@@ -249,6 +254,7 @@ class MainWindow ( QMainWindow ) :
         self.edit_menu.addAction( self.sync_action )
         self.edit_menu.addAction( self.missing_action )
         self.edit_menu.addAction( self.stats_action )
+        self.edit_menu.addAction( self.search_action )
 
         # Help menu
         self.help_menu = self._new_menu( "&Help" )
@@ -269,6 +275,7 @@ class MainWindow ( QMainWindow ) :
         self.main_toolbar.addAction( self.save_all_action )
         self.main_toolbar.addAction( self.sync_action )
         self.main_toolbar.addAction( self.stats_action )
+        self.main_toolbar.addAction( self.search_action )
 
         self.addToolBar( self.main_toolbar )
 
@@ -726,6 +733,13 @@ class MainWindow ( QMainWindow ) :
 
         dialog = StatisticsDialog( self, self.t_manager )
         dialog.lang_ns_selected.connect( self._select_lang_ns )
+        dialog.exec()
+
+
+    def _searching ( self ) -> None :
+        """Open searching dialog"""
+
+        dialog = SearchDialog( self, self.t_manager )
         dialog.exec()
 
 

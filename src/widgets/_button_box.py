@@ -7,6 +7,18 @@ Dialog for configuring the application
 from PyQt6.QtWidgets import QDialogButtonBox, QPushButton
 
 
+def close ( reject ) -> QDialogButtonBox :
+    """Create a standard Close button box"""
+
+    button_box = QDialogButtonBox(
+        QDialogButtonBox.StandardButton.Close
+    )
+
+    button_box.rejected.connect( reject )
+
+    return button_box
+
+
 def ok_close ( accept, reject ) -> QDialogButtonBox :
     """Create a standard OK/Close button box"""
 

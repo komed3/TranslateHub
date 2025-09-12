@@ -60,6 +60,7 @@ class MissingTranslationsDialog ( QDialog ) :
                         rows.append( ( lang, ns, key ) )
 
         # Populate table
+        self.table.clear()
         self.table.setColumnCount( 3 )
         self.table.setHorizontalHeaderLabels( [ "Language", "Namespace", "Key" ] )
         self.table.setRowCount( len( rows ) )

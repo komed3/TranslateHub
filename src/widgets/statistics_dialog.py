@@ -70,7 +70,6 @@ class StatisticsDialog ( QDialog ) :
 
         # Set up table
         self.table.clear()
-
         self.table.setColumnCount( ns_len + 1 )
         self.table.setRowCount( lngs_len + 1 )
         self.table.setHorizontalHeaderItem( ns_len, QTableWidgetItem( "Total" ) )
