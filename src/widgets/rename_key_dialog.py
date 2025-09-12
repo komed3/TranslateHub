@@ -6,10 +6,7 @@ Dialog for renaming translation keys
 
 from typing import Union
 
-from PyQt6.QtWidgets import (
-    QDialog, QLabel, QLineEdit, QHBoxLayout, QVBoxLayout,
-    QWidget
-)
+from PyQt6.QtWidgets import QDialog, QLabel, QLineEdit, QHBoxLayout, QVBoxLayout, QWidget
 
 from ._button_box import ok_close
 

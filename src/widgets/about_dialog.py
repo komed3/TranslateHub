@@ -9,9 +9,9 @@ from typing import Union
 
 from PyQt6.QtCore import QUrl, QT_VERSION_STR, PYQT_VERSION_STR
 from PyQt6.QtGui import QDesktopServices, QFont
-from PyQt6.QtWidgets import (
-    QDialog, QDialogButtonBox, QLabel, QPushButton, QVBoxLayout, QWidget
-)
+from PyQt6.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QWidget
+
+from ._button_box import close
 
 
 class AboutDialog ( QDialog ) :
@@ -71,8 +71,7 @@ class AboutDialog ( QDialog ) :
         self.layout.addWidget( sys_info )
 
         # Close button
-        self.button_box = QDialogButtonBox( QDialogButtonBox.StandardButton.Close )
-        self.button_box.rejected.connect( self.reject )
+        self.button_box = close( self.reject )
         self.layout.addWidget( self.button_box )
 
         self.setLayout( self.layout )

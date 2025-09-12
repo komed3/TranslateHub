@@ -1,6 +1,6 @@
 """
-TranslateHub - Config Dialog
-Dialog for configuring the application
+TranslateHub - Button Box
+Standard button boxes for dialogs
 """
 
 

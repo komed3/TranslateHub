@@ -8,9 +8,9 @@ from typing import Union
 
 import requests
 from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import (
-    QDialog, QDialogButtonBox, QLabel, QVBoxLayout, QWidget
-)
+from PyQt6.QtWidgets import QDialog, QLabel, QVBoxLayout, QWidget
+
+from ._button_box import close
 
 
 class UpdateDialog ( QDialog ) :
@@ -42,8 +42,7 @@ class UpdateDialog ( QDialog ) :
         self.layout.addWidget( self.info_label )
 
         # Dialog buttons
-        self.button_box = QDialogButtonBox( QDialogButtonBox.StandardButton.Close )
-        self.button_box.rejected.connect( self.reject )
+        self.button_box = close( self.reject )
         self.layout.addWidget( self.button_box )
 
         self.setLayout( self.layout )
