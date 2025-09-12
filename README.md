@@ -71,3 +71,22 @@ Run the application:
 ```bash
 ./translatehub.py
 ```
+
+## Building Standalone Executables
+
+You can create a standalone executable using PyInstaller for both Windows and Linux. Just run the provided script. The executable will be in the `dist/TranslateHub` directory.
+
+### Windows
+
+```bash
+pip install pyinstaller
+./build_windows.bat
+```
+
+### Linux
+
+```bash
+pip install pyinstaller
+chmod +x build_linux.sh
+./build_linux.sh
+```
