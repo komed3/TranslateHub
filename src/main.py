@@ -26,7 +26,7 @@ from PyQt6.QtCore import (
 
 from PyQt6.QtGui import QAction, QFont, QColor, QDesktopServices
 
-from translation_manager import TranslationManager
+from .translation_manager import TranslationManager
 
 
 # Application version
