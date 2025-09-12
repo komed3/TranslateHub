@@ -1,6 +1,7 @@
 [MESSAGES CONTROL]
 
 disable=
+    duplicate-code,
     import-error,
     invalid-name,
     no-name-in-module,
