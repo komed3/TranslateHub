@@ -7,12 +7,11 @@ About dialog showing application information
 import sys
 from typing import Union
 
+from PyQt6.QtCore import QUrl, QT_VERSION_STR, PYQT_VERSION_STR
+from PyQt6.QtGui import QDesktopServices, QFont
 from PyQt6.QtWidgets import (
     QDialog, QDialogButtonBox, QLabel, QPushButton, QVBoxLayout, QWidget
 )
-
-from PyQt6.QtCore import QUrl, QT_VERSION_STR, PYQT_VERSION_STR
-from PyQt6.QtGui import QDesktopServices, QFont
 
 
 class AboutDialog ( QDialog ) :

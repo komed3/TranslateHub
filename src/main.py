@@ -29,6 +29,7 @@ from PyQt6.QtGui import QAction, QFont, QColor, QDesktopServices
 from .translation_manager import TranslationManager
 from .widgets.about_dialog import AboutDialog
 from .widgets.config_dialog import ConfigDialog
+from .widgets.filterable_list_widget import FilterableListWidget
 from .widgets.rename_key_dialog import RenameKeyDialog
 from .widgets.translation_key_dialog import TranslationKeyDialog
 
@@ -37,93 +38,6 @@ from .widgets.translation_key_dialog import TranslationKeyDialog
 VERSION = "0.1.0"
 GITHUB_REPO = "https://github.com/komed3/TranslateHub"
 YEAR = "2025"
-
-
-class FilterableListWidget ( QWidget ) :
-    """List widget with search/filter functionality"""
-
-    item_selected = pyqtSignal( QListWidgetItem )
-
-    def __init__ ( self, parent: Union[ QWidget, None ] = None ) :
-        """Initialize filterable list widget"""
-
-        super().__init__( parent )
-        self.all_items = []
-
-        self.layout: QVBoxLayout = QVBoxLayout()
-        self.layout.setContentsMargins( 0, 0, 0, 0 )
-
-        # Header with title and filter
-        header_layout = QHBoxLayout()
-
-        self.filter_input = QLineEdit()
-        self.filter_input.setPlaceholderText( "Filter..." )
-        self.filter_input.textChanged.connect( self._apply_filter )
-
-        header_layout.addWidget( self.filter_input )
-        self.layout.addLayout( header_layout )
-
-        # List widget
-        self.list_widget = QListWidget()
-        self.list_widget.currentItemChanged.connect( self._on_item_selected )
-        self.list_widget.setContextMenuPolicy( Qt.ContextMenuPolicy.CustomContextMenu )
-
-        self.layout.addWidget( self.list_widget )
-        self.setLayout( self.layout )
-
-
-    def add_item ( self, text: str ) -> None :
-        """Add an item to the list"""
-
-        self.all_items.append( text )
-        self._apply_filter( self.filter_input.text() )
-
-
-    def clear ( self ) -> None :
-        """Clear all items"""
-
-        self.list_widget.clear()
-        self.all_items = []
-
-
-    def set_items ( self, items: List[ str ] ) -> None :
-        """Set the list of items"""
-
-        self.clear()
-        for item_text in items :
-            self.add_item( item_text )
-
-    def current_item ( self ) -> Union[ QListWidgetItem, None ] :
-        """Get the current selected item"""
-        return self.list_widget.currentItem()
-
-
-    def set_context_menu_policy ( self, policy ) -> None :
-        """Set the context menu policy"""
-        self.list_widget.setContextMenuPolicy( policy )
-
-
-    def customContextMenuRequested ( self, handler ) -> None :
-        """Connect custom context menu handler"""
-        self.list_widget.customContextMenuRequested.connect( handler )
-
-
-    def _apply_filter ( self, filter_text: str = "" ) -> None :
-        """Apply filter to the list"""
-
-        self.list_widget.clear()
-        filter_text = filter_text.lower()
-
-        for text in self.all_items :
-            if not filter_text or filter_text in text.lower() :
-                self.list_widget.addItem( QListWidgetItem( text ) )
-
-
-    def _on_item_selected ( self, current ) :
-        """Handle item selection"""
-
-        if current :
-            self.item_selected.emit( current )
 
 
 class TranslationEditor ( QWidget ) :
