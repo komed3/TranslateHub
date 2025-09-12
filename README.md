@@ -19,6 +19,13 @@ A cross-platform translation management tool for i18n projects, designed to make
 
 ## Installation
 
+Clone the repository:
+
+```bash
+git clone https://github.com/komed3/TranslateHub.git
+cd TranslateHub
+```
+
 ### Prerequisites
 
 Python 3.8 or higher  
@@ -26,49 +33,16 @@ pip (Python package installer)
 
 ### Windows
 
-Clone the repository:
-
-```bash
-git clone https://github.com/komed3/TranslateHub.git
-cd TranslateHub
-```
-
-Install the application:
-
 ```bash
 pip install -e .
-```
-
-Run the application:
-
-```bash
 python translatehub.py
 ```
 
 ### Linux
 
-Clone the repository:
-
-```bash
-git clone https://github.com/komed3/TranslateHub.git
-cd TranslateHub
-```
-
-Install the application:
-
 ```bash
 pip install -e .
-```
-
-Make the launcher script executable:
-
-```bash
 chmod +x translatehub.py
-```
-
-Run the application:
-
-```bash
 ./translatehub.py
 ```
 
