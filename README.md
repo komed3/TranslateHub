@@ -2,7 +2,7 @@
 
 **TranslateHub** is a cross-platform translation management tool for i18n projects, designed to make translation work quick and efficient. It supports multiple languages and namespaces, allowing you to easily manage and edit your translation files. Features include automatic sorting of keys, synchronization of translation keys across languages, progress tracking, and a comprehensive statistics view.
 
-This app was originally created to manage translations for the @airportmap projects, but should support other Node.js apps using i18next as well.
+This app was originally created to manage translations for the [@Airportmap](https://github.com/airportmap) projects, but should support other Node.js apps using i18next as well.
 
 ## Features
 
@@ -125,3 +125,8 @@ Each JSON file should contain key-value pairs for translations:
   ...
 }
 ```
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).  
+© 2025 [@komed3](https://github.com/komed3) (Paul Köhler)
