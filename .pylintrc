@@ -1,10 +1,11 @@
 [MESSAGES CONTROL]
 
 disable=
-    too-many-lines,
+    import-error,
+    invalid-name,
+    no-name-in-module,
     too-few-public-methods,
     too-many-instance-attributes,
+    too-many-lines,
     too-many-locals,
-    too-many-statements,
-    invalid-name,
-    import-error
+    too-many-statements
