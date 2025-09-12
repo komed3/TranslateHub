@@ -703,6 +703,9 @@ class MainWindow ( QMainWindow ) :
     def _select_lang_ns ( self, lang: str, ns: str ) -> None :
         """Select a language and namespace from statistics dialog"""
 
+        self.lang_list.filter_input.setText( "" )
+        self.ns_list.filter_input.setText( "" )
+
         # Find and select the language
         for i in range( self.lang_list.list_widget.count() ) :
             item = cast( QListWidgetItem, self.lang_list.list_widget.item( i ) )
