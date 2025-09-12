@@ -20,6 +20,7 @@ from .translation_manager import TranslationManager
 from .widgets.about_dialog import AboutDialog
 from .widgets.config_dialog import ConfigDialog
 from .widgets.filterable_list_widget import FilterableListWidget
+from .widgets.missing_translations_dialog import MissingTranslationsDialog
 from .widgets.rename_key_dialog import RenameKeyDialog
 from .widgets.statistics_dialog import StatisticsDialog
 from .widgets.translation_editor import TranslationEditor
@@ -197,11 +198,14 @@ class MainWindow ( QMainWindow ) :
         self.exit_action.triggered.connect( self.close )
 
         # Edit actions
-        self.sync_action = QAction( "&Synchronize Keys", self )
+        self.sync_action = QAction( "Synchronize &Keys", self )
         self.sync_action.setShortcut( "F5" )
         self.sync_action.triggered.connect( self._synchronize_keys )
 
-        self.stats_action = QAction( "Statistics", self )
+        self.missing_action = QAction( "&Missing Translations", self )
+        self.missing_action.triggered.connect( self._show_missing )
+
+        self.stats_action = QAction( "&Statistics", self )
         self.stats_action.triggered.connect( self._show_statistics )
 
         # Help actions
@@ -243,6 +247,7 @@ class MainWindow ( QMainWindow ) :
         # Edit menu
         self.edit_menu = self._new_menu( "&Edit" )
         self.edit_menu.addAction( self.sync_action )
+        self.edit_menu.addAction( self.missing_action )
         self.edit_menu.addAction( self.stats_action )
 
         # Help menu
@@ -707,6 +712,13 @@ class MainWindow ( QMainWindow ) :
             )
 
             self.status_label.setText( "All keys are already synchronized" )
+
+
+    def _show_missing ( self ) -> None :
+        """Show missing translations dialog"""
+
+        dialog = MissingTranslationsDialog( self, self.t_manager )
+        dialog.exec()
 
 
     def _show_statistics ( self ) -> None :
