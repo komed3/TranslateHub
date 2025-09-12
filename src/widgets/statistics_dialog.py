@@ -44,14 +44,13 @@ class StatisticsDialog ( QDialog ) :
 
         self.layout.addWidget( self.table )
 
-        # Refresh button
-        refresh_btn = QPushButton( "Refresh" )
-        refresh_btn.clicked.connect( self._load_statistics )
-        self.layout.addWidget( refresh_btn )
-
-        # Close button
+        # Refresh and close button
         self.button_box = QDialogButtonBox( QDialogButtonBox.StandardButton.Close )
         self.button_box.rejected.connect( self.reject )
+
+        refresh_btn = QPushButton( "Refresh" )
+        refresh_btn.clicked.connect( self._load_statistics )
+        self.button_box.addButton( refresh_btn, QDialogButtonBox.ButtonRole.ActionRole )
 
         self.layout.addWidget( self.button_box )
 

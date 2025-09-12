@@ -195,7 +195,7 @@ class MainWindow ( QMainWindow ) :
         self.sync_action.setShortcut( "F5" )
         self.sync_action.triggered.connect( self._synchronize_keys )
 
-        self.stats_action = QAction( "Show Statistics", self )
+        self.stats_action = QAction( "Statistics", self )
         self.stats_action.triggered.connect( self._show_statistics )
 
         # Help actions
