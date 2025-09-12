@@ -9,8 +9,8 @@ from typing import Union
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtGui import QColor
 from PyQt6.QtWidgets import (
-    QAbstractItemView, QDialog, QDialogButtonBox, QPushButton, QTableWidget,
-    QTableWidgetItem, QVBoxLayout, QWidget
+    QAbstractItemView, QDialog, QTableWidget, QTableWidgetItem,
+    QVBoxLayout, QWidget
 )
 
 from ._button_box import refresh_close
