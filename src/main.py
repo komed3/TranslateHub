@@ -190,10 +190,6 @@ class MainWindow ( QMainWindow ) :
         self.save_all_action.setShortcut( "Ctrl+S" )
         self.save_all_action.triggered.connect( self._save_all )
 
-        self.reset_filter_action = QAction( "&Reset Filter", self )
-        self.reset_filter_action.setShortcut( "Ctrl+R" )
-        self.reset_filter_action.triggered.connect( self._reset_filter )
-
         self.exit_action = QAction( "E&xit", self )
         self.exit_action.setShortcut( "Ctrl+Q" )
         self.exit_action.triggered.connect( self.close )
@@ -202,6 +198,10 @@ class MainWindow ( QMainWindow ) :
         self.sync_action = QAction( "Synchronize &Keys", self )
         self.sync_action.setShortcut( "F5" )
         self.sync_action.triggered.connect( self._synchronize_keys )
+
+        self.reset_filter_action = QAction( "&Reset Filter", self )
+        self.reset_filter_action.setShortcut( "Ctrl+R" )
+        self.reset_filter_action.triggered.connect( self._reset_filter )
 
         self.missing_action = QAction( "&Missing Translations", self )
         self.missing_action.triggered.connect( self._show_missing )
@@ -245,16 +245,17 @@ class MainWindow ( QMainWindow ) :
         self.file_menu = self._new_menu( "&File" )
         self.file_menu.addAction( self.open_action )
         self.file_menu.addAction( self.save_all_action )
-        self.file_menu.addAction( self.reset_filter_action )
         self.file_menu.addSeparator()
         self.file_menu.addAction( self.exit_action )
 
         # Edit menu
         self.edit_menu = self._new_menu( "&Edit" )
         self.edit_menu.addAction( self.sync_action )
+        self.edit_menu.addAction( self.reset_filter_action )
+        self.edit_menu.addAction( self.search_action )
+        self.edit_menu.addSeparator()
         self.edit_menu.addAction( self.missing_action )
         self.edit_menu.addAction( self.stats_action )
-        self.edit_menu.addAction( self.search_action )
 
         # Help menu
         self.help_menu = self._new_menu( "&Help" )
@@ -274,8 +275,8 @@ class MainWindow ( QMainWindow ) :
         self.main_toolbar.addAction( self.open_action )
         self.main_toolbar.addAction( self.save_all_action )
         self.main_toolbar.addAction( self.sync_action )
-        self.main_toolbar.addAction( self.stats_action )
         self.main_toolbar.addAction( self.search_action )
+        self.main_toolbar.addAction( self.stats_action )
 
         self.addToolBar( self.main_toolbar )
 
