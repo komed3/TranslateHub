@@ -2,22 +2,24 @@
 
 **TranslateHub** is a cross-platform translation management tool for i18n projects, designed to make translation work quick and efficient. It supports multiple languages and namespaces, allowing you to easily manage and edit your translation files. Features include automatic sorting of keys, synchronization of translation keys across languages, progress tracking, and a comprehensive statistics view.
 
-This app was originally created to manage translations for the [@Airportmap](https://github.com/airportmap) projects, but should support other Node.js apps using i18next as well.
+This app was originally created to manage translations for the [@Airportmap](https://github.com/airportmap) projects, but should support other Node.js apps using [i18next](https://npmjs.com/package/i18next) as well.
 
 ## Features
 
-**Language Management**: Create, delete, and rename language folders  
-**Namespace Management**: Create, delete, and rename namespace files  
-**Translation Editing**: Edit translations with a user-friendly interface  
-**Key Management**: Add, delete, and rename translation keys  
-**Automatic Sorting**: Keys are automatically sorted alphabetically when saving  
-**Synchronization**: Ensure all languages have the same translation keys  
-**Progress Tracking**: Visual progress bars for languages and namespaces  
-**Statistics View**: Comprehensive statistics showing translation progress across all languages and namespaces  
-**Filtering**: Search and filter languages and namespaces for quick access  
-**Hide Translated**: Option to hide already translated values to focus on untranslated content  
-**Auto-save**: Changes are automatically saved periodically  
-**Cross-platform**: Works on Windows and Linux
+- **Language Management**: Create, delete, and rename language folders
+- **Namespace Management**: Create, delete, and rename namespace files
+- **Translation Editing**: Edit translations with a user-friendly interface
+- **Key Management**: Add, delete, and rename translation keys
+- **Automatic Sorting**: Keys are automatically sorted alphabetically when saving
+- **Synchronization**: Ensure all languages have the same translation keys
+- **Progress Tracking**: Visual progress bars for languages and namespaces
+- **Statistics View**: Comprehensive statistics showing translation progress across all languages and namespaces
+- **Missing Translations**: See all missing translations within all languages and namespaces
+- **Search**: Search for keys or values in all languages and namespaces
+- **Filtering**: Search and filter languages and namespaces for quick access
+- **Hide Translated**: Option to hide already translated values to focus on untranslated content
+- **Auto-save**: Changes are automatically saved periodically
+- **Cross-platform**: Works on Windows and Linux
 
 ## Installation
 
@@ -73,6 +75,8 @@ chmod +x build_linux.sh
 
 When you first run **TranslateHub**, you'll be prompted to select your translation root directory. This should be the directory containing your language folders (e.g., `en-US`, `de-DE`). Once selected, the app will load all languages and namespaces.
 
+Closing out of the project via menu (`File` -> `Close Project`) will close the app and remove the current project folder. Normal closing will keep the current folder loaded for the next start.
+
 ### Working with Languages and Namespaces
 
 Languages and namespaces are displayed in the left panel. You can manage them by adding, renaming, or deleting. To add a new language or namespace, use the `Add` button next to the respective header. Rename or delete by right-clicking on the item.
@@ -83,7 +87,7 @@ Additionally, you can filter the list of languages and namespaces using the filt
 
 To edit translations, use the editor in the right panel. If the editor is empty, ensure you have selected a language and namespace from the left panel.
 
-Now, you can edit translations directly in the text fields. Changes are automatically saved periodically. Use the "Hide Translated Values" checkbox to focus on untranslated content.
+Now, you can edit translations directly in the text fields. Changes are automatically saved periodically. Use the "Hide Translated Values" checkbox to focus on untranslated content. To search for specific keys or values, use the filter box at the top of the editor.
 
 ### Managing Translation Keys
 
@@ -98,6 +102,8 @@ Syncing will happen automatically. You can also manually synchronize keys using 
 The **TranslateHub** app provides a comprehensive statistics view to help you track the translation progress. Progress bars at the bottom of the left panel shows the progress for the currently selected language and namespace.
 
 If you want to see overall statistics, use the `Show Statistics` option in the `Edit` menu. This dialog shows translation progress for all languages and namespaces as a matrix. Double-click on a cell to navigate directly to that language and namespace.
+
+Via `Missing Translations` in the `Edit` menu, you can see all missing translations across all languages and namespaces in a list view. Alternatively, you can search within all translations using the `Search` option.
 
 ## Project Structure
 
