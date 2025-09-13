@@ -41,7 +41,7 @@ class UpdateDialog ( QDialog ) :
         self.layout.addWidget( dialog_title( "Check for updates" ) )
 
         # Info label
-        self.info_label = QLabel( "Fetching version from GitHub API...<br /><br />" )
+        self.info_label = QLabel( "Fetching version from GitHub API ...<br /><br />" )
         self.layout.addWidget( self.info_label )
 
         # Dialog buttons
