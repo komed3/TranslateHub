@@ -1,5 +1,8 @@
 # TranslateHub
 
+![GitHub Release](https://img.shields.io/github/v/release/komed3/TranslateHub?include_prereleases&display_name=release&style=for-the-badge)
+![GitHub License](https://img.shields.io/github/license/komed3/TranslateHub?style=for-the-badge)
+
 **TranslateHub** is a cross-platform translation management tool for i18n projects, designed to make translation work quick and efficient. It supports multiple languages and namespaces, allowing you to easily manage and edit your translation files. Features include automatic sorting of keys, synchronization of translation keys across languages, progress tracking, and a comprehensive statistics view.
 
 This app was originally created to manage translations for the [@Airportmap](https://github.com/airportmap) projects, but should support other Node.js apps using [i18next](https://npmjs.com/package/i18next) as well.
