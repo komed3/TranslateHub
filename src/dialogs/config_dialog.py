@@ -8,11 +8,11 @@ from pathlib import Path
 from typing import Union
 
 from PyQt6.QtWidgets import (
-    QDialog, QFileDialog, QHBoxLayout, QLabel, QLineEdit,
-    QPushButton, QVBoxLayout, QWidget
+    QDialog, QFileDialog, QHBoxLayout, QLabel, QLineEdit, QPushButton,
+    QVBoxLayout, QWidget
 )
 
-from ..lib._button_box import ok_close
+from ..helper._button_box import ok_close
 
 
 class ConfigDialog ( QDialog ) :

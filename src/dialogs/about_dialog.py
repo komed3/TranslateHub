@@ -11,7 +11,7 @@ from PyQt6.QtCore import QUrl, QT_VERSION_STR, PYQT_VERSION_STR
 from PyQt6.QtGui import QDesktopServices, QFont
 from PyQt6.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QWidget
 
-from ..lib._button_box import close
+from ..helper._button_box import close
 
 
 class AboutDialog ( QDialog ) :

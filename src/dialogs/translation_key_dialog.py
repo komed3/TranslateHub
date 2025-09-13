@@ -7,9 +7,10 @@ Dialog for adding or editing translation keys
 from typing import Tuple, Union
 
 from PyQt6.QtWidgets import (
-    QDialog, QDialogButtonBox, QLabel, QLineEdit, QHBoxLayout,
-    QTextEdit, QVBoxLayout, QWidget
+    QDialog, QLabel, QLineEdit, QHBoxLayout, QTextEdit, QVBoxLayout, QWidget
 )
+
+from ..helper._button_box import ok_close
 
 
 class TranslationKeyDialog ( QDialog ) :
@@ -50,14 +51,7 @@ class TranslationKeyDialog ( QDialog ) :
         self.layout.addLayout( value_layout )
 
         # Dialog buttons
-        self.button_box = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Ok |
-            QDialogButtonBox.StandardButton.Cancel
-        )
-
-        self.button_box.accepted.connect( self.accept )
-        self.button_box.rejected.connect( self.reject )
-
+        self.button_box = ok_close( self.accept, self.reject )
         self.layout.addWidget( self.button_box )
 
         self.setLayout( self.layout )

@@ -8,7 +8,7 @@ from typing import Union
 
 from PyQt6.QtWidgets import QDialog, QLabel, QLineEdit, QHBoxLayout, QVBoxLayout, QWidget
 
-from ..lib._button_box import ok_close
+from ..helper._button_box import ok_close
 
 
 class RenameKeyDialog ( QDialog ) :

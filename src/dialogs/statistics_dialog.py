@@ -13,7 +13,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout, QWidget
 )
 
-from ..lib._button_box import refresh_close
+from ..helper._button_box import refresh_close
 from ..translation_manager import TranslationManager
 
 
