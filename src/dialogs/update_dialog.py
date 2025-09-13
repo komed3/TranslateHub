@@ -10,7 +10,7 @@ import requests
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QDialog, QLabel, QVBoxLayout, QWidget
 
-from ._button_box import close
+from ..lib._button_box import close
 
 
 class UpdateDialog ( QDialog ) :

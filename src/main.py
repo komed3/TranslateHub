@@ -17,16 +17,16 @@ from PyQt6.QtWidgets import (
 )
 
 from .translation_manager import TranslationManager
-from .widgets.about_dialog import AboutDialog
-from .widgets.config_dialog import ConfigDialog
+from .dialogs.about_dialog import AboutDialog
+from .dialogs.config_dialog import ConfigDialog
+from .dialogs.missing_translations_dialog import MissingTranslationsDialog
+from .dialogs.rename_key_dialog import RenameKeyDialog
+from .dialogs.search_dialog import SearchDialog
+from .dialogs.statistics_dialog import StatisticsDialog
+from .dialogs.translation_key_dialog import TranslationKeyDialog
+from .dialogs.update_dialog import UpdateDialog
 from .widgets.filterable_list_widget import FilterableListWidget
-from .widgets.missing_translations_dialog import MissingTranslationsDialog
-from .widgets.rename_key_dialog import RenameKeyDialog
-from .widgets.search_dialog import SearchDialog
-from .widgets.statistics_dialog import StatisticsDialog
 from .widgets.translation_editor import TranslationEditor
-from .widgets.translation_key_dialog import TranslationKeyDialog
-from .widgets.update_dialog import UpdateDialog
 
 
 # Application version

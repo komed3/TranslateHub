@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import (
     QPushButton, QVBoxLayout, QWidget
 )
 
-from ._button_box import ok_close
+from ..lib._button_box import ok_close
 
 
 class ConfigDialog ( QDialog ) :

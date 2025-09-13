@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
     QTableWidgetItem, QVBoxLayout, QWidget
 )
 
-from ._button_box import close
+from ..lib._button_box import close
 from ..translation_manager import TranslationManager
 
 
