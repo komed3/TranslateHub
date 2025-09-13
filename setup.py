@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 
 setup(
     name= "TranslateHub",
-    version= "0.1.0",
+    version= "0.1.1",
     description= "Cross-platform Translation Management Tool for i18n projects",
     author= "komed3 (Paul Köhler)",
     packages= find_packages(),

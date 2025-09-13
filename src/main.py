@@ -30,7 +30,7 @@ from .widgets.translation_editor import TranslationEditor
 
 
 # Application version
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 GITHUB_OWNER = "komed3"
 GITHUB_REPO = "TranslateHub"
 YEAR = "2025"
