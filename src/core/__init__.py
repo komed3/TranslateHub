@@ -8,8 +8,8 @@ from .translation_operations import TranslationOperations
 from .structure_manager import StructureManager
 
 __all__ = [
-    'TranslationManager',
-    'FileOperations', 
-    'TranslationOperations',
-    'StructureManager'
+    "TranslationManager",
+    "FileOperations",
+    "TranslationOperations",
+    "StructureManager"
 ]
