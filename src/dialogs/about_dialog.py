@@ -6,13 +6,11 @@ About dialog showing application information
 from typing import Optional
 
 import sys
-
 from PyQt6.QtCore import PYQT_VERSION_STR, QT_VERSION_STR, QUrl
 from PyQt6.QtGui import QDesktopServices
 from PyQt6.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QWidget
 
-from ..helpers.button_box import close
-from ..helpers.dialog_elements import dialog_title
+from ..helpers import close, dialog_title
 
 
 class AboutDialog ( QDialog ) :
