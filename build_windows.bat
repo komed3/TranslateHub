@@ -26,7 +26,7 @@ pyinstaller --name TranslateHub ^
     --exclude-module pdb ^
     --exclude-module difflib ^
     --exclude-module doctest ^
-    translatehub.py
+    --onefile translatehub.py
 
 echo.
 echo Build complete! The executable is in the dist/TranslateHub directory.
