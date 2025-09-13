@@ -67,9 +67,9 @@ class UpdateDialog ( QDialog ) :
 
             # Check if latest version is different from current version
             if latest and latest != self.version :
-                self.info_label.setText( "\n".join( [
-                    f"New version available: <b>{latest}</b><br />",
-                    f"Your version: {self.version}<br />",
+                self.info_label.setText( "<br />".join( [
+                    f"New version available: <b>{latest}</b>",
+                    f"Your version: {self.version}",
                     f'Download: <a href="{url}">Open Release Page</a>'
                 ] ) )
                 self.info_label.setOpenExternalLinks( True )

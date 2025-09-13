@@ -35,7 +35,7 @@ class AboutDialog ( QDialog ) :
         self.layout.addWidget( title_label )
 
         # Description
-        desc_label = QLabel( "\n".join( [
+        desc_label = QLabel( "<br />".join( [
             "A cross-platform translation management tool for i18n projects.",
             "Designed to make translation work quick and efficient."
         ] ) )
@@ -44,7 +44,7 @@ class AboutDialog ( QDialog ) :
         self.layout.addWidget( desc_label )
 
         # Version and Copyright
-        copyright_label = QLabel( "\n".join( [
+        copyright_label = QLabel( "<br />".join( [
             f"Version {version}",
             f"© {year} komed3 (Paul Köhler)"
         ] ) )
@@ -61,8 +61,8 @@ class AboutDialog ( QDialog ) :
         self.layout.addSpacing( 20 )
 
         # System info
-        sys_info = QLabel( "\n".join( [
-            "Environment:",
+        sys_info = QLabel( "<br />".join( [
+            "<u>Environment:</u>",
             f"Python: {sys.version.split()[ 0 ]}",
             f"PyQt: {QT_VERSION_STR} / {PYQT_VERSION_STR}",
             f"OS: {sys.platform}"
