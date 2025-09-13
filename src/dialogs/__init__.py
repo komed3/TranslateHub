@@ -3,6 +3,7 @@ TranslateHub - Dialogs Module
 """
 
 from .about_dialog import AboutDialog
+from .config_dialog import ConfigDialog
 from .export_dialog import ExportDialog
 from .missing_translations_dialog import MissingTranslationsDialog
 from .options_dialog import OptionsDialog
@@ -14,6 +15,7 @@ from .update_dialog import UpdateDialog
 
 __all__ = [
     "AboutDialog",
+    "ConfigDialog",
     "ExportDialog",
     "MissingTranslationsDialog",
     "OptionsDialog",
