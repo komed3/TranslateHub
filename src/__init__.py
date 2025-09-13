@@ -1,11 +1,10 @@
 """
 TranslateHub - Translation Management Tool
-Cross-platform translation management tool for i18n projects
 """
 
 from .main import VERSION
-from .run import main
+from .run import launch
 
 __name__ = "TranslateHub"
 __version__ = VERSION
-__all__ = [ "main" ]
+__all__ = [ "launch" ]

@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import QApplication
 from .main import TranslateHub, VERSION
 
 
-def main() -> None :
+def launch () -> None :
     """Main application entry point"""
 
     app = QApplication( sys.argv )
