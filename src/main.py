@@ -504,13 +504,14 @@ class TranslateHub ( QMainWindow ) :
             self.t_manager.mark_as_modified( lang, ns, key )
 
 
-    def _auto_save ( self ) -> None :
+    def _auto_save ( self ) -> bool :
         """Auto-save current translations"""
 
         if (
             self.t_editor.current_lang
             and self.t_editor.current_ns
             and self.t_editor.data
+            and self.t_editor.modified_keys
         ) :
             # Get compression setting
             self.t_manager.save_translations(
@@ -519,15 +520,20 @@ class TranslateHub ( QMainWindow ) :
             )
 
             self._update_progress_bars()
+            self.t_editor.clear_modified()
             self._set_status_message( "Auto-saved translations" )
+            return True
+
+        return False
 
 
     def _save_all ( self ) -> None :
         """Save all translations"""
 
-        self._auto_save()
-        self._update_progress_bars()
-        self._set_status_message( "All translations saved" )
+        if self._auto_save() :
+            self._set_status_message( "All translations saved" )
+        else:
+            self._set_status_message( "Translation up to date" )
 
 
     def _reset_filter ( self ) -> None :

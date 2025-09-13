@@ -3,7 +3,7 @@ TranslateHub - Options Dialog
 Dialog for configuring application options
 """
 
-from typing import Dict, Optional, Union
+from typing import Dict, Optional, Union, cast
 
 from PyQt6.QtCore import QSettings
 from PyQt6.QtWidgets import (
@@ -32,7 +32,6 @@ class OptionsDialog ( QDialog ) :
         self.settings = settings
         self.setWindowTitle( "Options" )
         self.resize( 500, 400 )
-
         self.layout: QVBoxLayout = QVBoxLayout()
 
         # Tab widget
@@ -148,26 +147,49 @@ class OptionsDialog ( QDialog ) :
         self._load_settings()
 
 
+    def get_settings_dict ( self ) -> Dict[ str, Union[ str, int, bool ] ] :
+        """Get settings as a dictionary"""
+
+        if not self.settings :
+            return {}
+
+        return {
+            "auto_save": self.settings.value( "auto_save", True, bool ),
+            "auto_save_interval": int(
+                self.settings.value( "auto_save_interval", 30000, int ) / 1000
+            ),
+            "compress_json": self.settings.value( "compress_json", False, bool ),
+            "status_timeout": int(
+                self.settings.value( "status_timeout", 5000, int ) / 1000
+            ),
+            "schema_dir_name": self.settings.value( "schema_dir_name", "_schema", str ),
+            "api_enabled": self.settings.value( "api_enabled", False, bool ),
+            "api_url": self.settings.value( "api_url", "", str ),
+            "api_key": self.settings.value( "api_key", "", str ),
+            "api_pattern": self.settings.value( "api_pattern", "", str )
+        }
+
+
     def _load_settings ( self ) -> None :
         """Load settings into dialog"""
 
-        if not self.settings :
+        if not ( settings := self.get_settings_dict() ) :
             return
 
         # General settings
-        self.auto_save_cb.setChecked( self.settings.value( "auto_save", True, bool ) )
-        self.auto_save_interval.setValue( self.settings.value( "auto_save_interval", 30, int ) )
-        self.compress_json_cb.setChecked( self.settings.value( "compress_json", False, bool ) )
-        self.status_timeout.setValue( self.settings.value( "status_timeout", 5, int ) )
+        self.auto_save_cb.setChecked( cast( bool, settings[ "auto_save" ] ) )
+        self.auto_save_interval.setValue( cast( int, settings[ "auto_save_interval" ] ) )
+        self.compress_json_cb.setChecked( cast( bool, settings[ "compress_json" ] ) )
+        self.status_timeout.setValue( cast( int, settings[ "status_timeout" ] ) )
 
         # Schema settings
-        self.schema_dir_name.setText( self.settings.value( "schema_dir_name", "_schema", str ) )
+        self.schema_dir_name.setText( cast( str, settings[ "schema_dir_name" ] ) )
 
         # API settings
-        self.api_enabled_cb.setChecked( self.settings.value( "api_enabled", False, bool ) )
-        self.api_url.setText( self.settings.value( "api_url", "", str ) )
-        self.api_key.setText( self.settings.value( "api_key", "", str ) )
-        self.api_pattern.setText( self.settings.value( "api_pattern", "", str ) )
+        self.api_enabled_cb.setChecked( cast( bool, settings[ "api_enabled" ] ) )
+        self.api_url.setText( cast( str, settings[ "api_url" ] ) )
+        self.api_key.setText( cast( str, settings[ "api_key" ] ) )
+        self.api_pattern.setText( cast( str, settings[ "api_pattern" ] ) )
 
 
     def _save_settings ( self ) -> None :
@@ -178,9 +200,9 @@ class OptionsDialog ( QDialog ) :
 
         # General settings
         self.settings.setValue( "auto_save", self.auto_save_cb.isChecked() )
-        self.settings.setValue( "auto_save_interval", self.auto_save_interval.value() )
+        self.settings.setValue( "auto_save_interval", self.auto_save_interval.value() * 1000 )
         self.settings.setValue( "compress_json", self.compress_json_cb.isChecked() )
-        self.settings.setValue( "status_timeout", self.status_timeout.value() )
+        self.settings.setValue( "status_timeout", self.status_timeout.value() * 1000 )
 
         # Schema settings
         self.settings.setValue( "schema_dir_name", self.schema_dir_name.text() )
@@ -192,19 +214,3 @@ class OptionsDialog ( QDialog ) :
         self.settings.setValue( "api_pattern", self.api_pattern.text() )
 
         self.accept()
-
-
-    def get_settings_dict ( self ) -> Dict[ str, Union[ str, int ] ] :
-        """Get settings as a dictionary"""
-
-        return {
-            "auto_save": self.auto_save_cb.isChecked(),
-            "auto_save_interval": self.auto_save_interval.value() * 1000,
-            "compress_json": self.compress_json_cb.isChecked(),
-            "status_timeout": self.status_timeout.value() * 1000,
-            "schema_dir_name": self.schema_dir_name.text(),
-            "api_enabled": self.api_enabled_cb.isChecked(),
-            "api_url": self.api_url.text(),
-            "api_key": self.api_key.text(),
-            "api_pattern": self.api_pattern.text(),
-        }
