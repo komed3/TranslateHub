@@ -7,10 +7,16 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QLabel
 
 
+def dialog_label ( title: str, size: int = 12 ) -> QLabel :
+    """Create a styled label for dialogs"""
+
+    label = QLabel( title )
+    label.setFont( QFont( "", size, QFont.Weight.Bold ) )
+
+    return label
+
+
 def dialog_title ( title: str ) -> QLabel :
     """Create a styled title label for dialogs"""
 
-    title_label = QLabel( title )
-    title_label.setFont( QFont( "", 16, QFont.Weight.Bold ) )
-
-    return title_label
+    return dialog_label( title, 16 )
