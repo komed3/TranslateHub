@@ -104,14 +104,14 @@ class TranslationAPI :
 
             if translated_text :
                 return True, translated_text, None
-            else :
-                return False, text, "Could not find translated text in API response"
+
+            return False, text, "Could not find translated text in API response"
 
         except requests.RequestException as e :
             return False, text, f"API request failed: {str( e )}"
         except json.JSONDecodeError :
             return False, text, "Invalid JSON response from API"
-        except Exception as e :
+        except Exception as e :  # pylint: disable=broad-exception-caught
             return False, text, f"Translation failed: {str( e )}"
 
 

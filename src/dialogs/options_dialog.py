@@ -27,7 +27,7 @@ class OptionsDialog ( QDialog ) :
             parent: Parent widget
             settings: Application settings
         """
- 
+
         super().__init__( parent )
         self.settings = settings
         self.setWindowTitle( "Options" )
@@ -124,7 +124,8 @@ class OptionsDialog ( QDialog ) :
             "{source} - Source language",
             "{target} - Target language",
             "",
-            "Example: https://api.example.com/translate?q={text}&source={source}&target={target}&key={key}"
+            "<u>Example:</u>"
+            "https://api.example.com/translate?q={text}&source={source}&target={target}&key={key}"
         ] ) )
         self.api_layout.addWidget( help_label )
 

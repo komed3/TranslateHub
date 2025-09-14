@@ -89,7 +89,7 @@ class FilterableListWidget ( QWidget ) :
         self.list_widget.setContextMenuPolicy( policy )
 
 
-    def customContextMenuRequested ( self, handler ) -> None :
+    def customContextMenuRequested ( self, handler ) -> None :  # pylint: disable=invalid-name
         """Connect custom context menu handler"""
 
         self.list_widget.customContextMenuRequested.connect( handler )

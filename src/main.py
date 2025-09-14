@@ -7,7 +7,7 @@ from typing import Dict
 
 import os
 from PyQt6.QtCore import QSettings, QSize, Qt, QTimer, QUrl
-from PyQt6.QtGui import QAction, QDesktopServices, QFont, QIcon
+from PyQt6.QtGui import QAction, QDesktopServices, QIcon
 from PyQt6.QtWidgets import (
     QHBoxLayout, QInputDialog, QLabel, QMainWindow, QMenu, QMessageBox,
     QProgressBar, QPushButton, QSplitter, QStatusBar, QToolBar,
@@ -219,7 +219,7 @@ class TranslateHub ( QMainWindow ) :
         self.export_action.triggered.connect( self._show_export_dialog )
 
         self.options_action = QAction( "&Options", self )
-        self.options_action.triggered.connect( lambda: self._show_options_dialog() )
+        self.options_action.triggered.connect( self._show_options_dialog() )
 
         self.exit_action = QAction( "E&xit", self )
         self.exit_action.setShortcut( "Ctrl+Q" )
@@ -926,7 +926,7 @@ class TranslateHub ( QMainWindow ) :
         self.status_label.setText( "Ready" )
 
 
-    def closeEvent ( self, event ) -> None :
+    def closeEvent ( self, event ) -> None :  # pylint: disable=invalid-name
         """Handle window close event"""
 
         # Save current translations before closing

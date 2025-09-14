@@ -7,8 +7,8 @@ from typing import List, Optional, Tuple
 
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import (
-    QCheckBox, QDialog, QHBoxLayout, QHeaderView, QLineEdit, QTableWidget,
-    QTableWidgetItem, QVBoxLayout, QWidget
+    QCheckBox, QDialog, QHBoxLayout, QLineEdit, QTableWidget, QTableWidgetItem,
+    QVBoxLayout, QWidget
 )
 
 from ..core import TranslationManager
