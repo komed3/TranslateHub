@@ -3,26 +3,9 @@
 ![GitHub Release](https://img.shields.io/github/v/release/komed3/TranslateHub?include_prereleases&display_name=release&style=for-the-badge)
 ![GitHub License](https://img.shields.io/github/license/komed3/TranslateHub?style=for-the-badge)
 
-**TranslateHub** is a cross-platform translation management tool for i18n projects, designed to make translation work quick and efficient. It supports multiple languages and namespaces, allowing you to easily manage and edit your translation files. Features include automatic sorting of keys, synchronization of translation keys across languages, progress tracking, and a comprehensive statistics view.
+**TranslateHub** is a cross-platform translation management tool for i18n projects, designed to make translation work quick and efficient. It supports multiple languages and namespaces, allowing for easily manage and edit translation files. Features include automatic sorting and synchronization of translation keys across languages using a schema that stores the structure of all namespaces. The app provides a user-friendly interface for editing translations, tracking progress, searching and filtering, exporting, and comprehensive statistics.
 
-This app was originally created to manage translations for the [@Airportmap](https://github.com/airportmap) projects, but should support other Node.js apps using [i18next](https://npmjs.com/package/i18next) as well.
-
-## Features
-
-- **Language Management**: Create, delete, and rename language folders
-- **Namespace Management**: Create, delete, and rename namespace files
-- **Translation Editing**: Edit translations with a user-friendly interface
-- **Key Management**: Add, delete, and rename translation keys
-- **Automatic Sorting**: Keys are automatically sorted alphabetically when saving
-- **Synchronization**: Ensure all languages have the same translation keys
-- **Progress Tracking**: Visual progress bars for languages and namespaces
-- **Statistics View**: Comprehensive statistics showing translation progress across all languages and namespaces
-- **Missing Translations**: See all missing translations within all languages and namespaces
-- **Search**: Search for keys or values in all languages and namespaces
-- **Filtering**: Search and filter languages and namespaces for quick access
-- **Hide Translated**: Option to hide already translated values to focus on untranslated content
-- **Auto-save**: Changes are automatically saved periodically
-- **Cross-platform**: Works on Windows and Linux
+This app was originally created to manage translations for the [@Airportmap](https://github.com/airportmap) projects, but should support other Node.js apps using [i18next](https://npmjs.com/package/i18next) or similar structures as well.
 
 ## Installation
 
@@ -35,7 +18,7 @@ cd TranslateHub
 
 ### Prerequisites
 
-Python 3.8 or higher  
+Python 3.9 or higher  
 pip (Python package installer)
 
 ### Windows
@@ -57,6 +40,8 @@ chmod +x translatehub.py
 
 You can create a standalone executable using PyInstaller for both Windows and Linux. Just run the provided script. The executable will be in the `dist/TranslateHub` directory.
 
+**Just a reminder:** Windows defender might flag the executable as suspicious. This is a common false positive for PyInstaller builds. You can safely ignore this warning. If you want to take further investigation, submit the executable to Microsoft Security following [these instructions](https://www.microsoft.com/en-us/wdsi/filesubmission).
+
 ### Windows
 
 ```bash
@@ -76,9 +61,13 @@ chmod +x build_linux.sh
 
 ### Getting Started
 
-When you first run **TranslateHub**, you'll be prompted to select your translation root directory. This should be the directory containing your language folders (e.g., `en-US`, `de-DE`). Once selected, the app will load all languages and namespaces.
+When you first run **TranslateHub**, you'll be prompted to select the translation root directory. This should be the directory containing your language folders (e.g., `en-US`, `de-DE`). Once selected, the app will load all languages and namespaces. If the project does not contain a valid schema directory, one will be created automatically.
+
+In the options dialog (`File` -> `Options`), you can configure settings such as the auto-save interval, JSON file compressing, and much more.
 
 Closing out of the project via menu (`File` -> `Close Project`) will close the app and remove the current project folder. Normal closing will keep the current folder loaded for the next start.
+
+If you want to export translations, use the `Export` option in the `File` menu. This will create a zip file containing languages and namespaces of your choice.
 
 ### Working with Languages and Namespaces
 
@@ -90,7 +79,7 @@ Additionally, you can filter the list of languages and namespaces using the filt
 
 To edit translations, use the editor in the right panel. If the editor is empty, ensure you have selected a language and namespace from the left panel.
 
-Now, you can edit translations directly in the text fields. Changes are automatically saved periodically. Use the "Hide Translated Values" checkbox to focus on untranslated content. To search for specific keys or values, use the filter box at the top of the editor.
+Now, you can edit translations directly in the text fields. Changes are highlighted and automatically saved periodically (if activated). Use the "Hide Translated Values" checkbox to focus on untranslated content. To search for specific keys or values, use the filter box at the top of the editor.
 
 ### Managing Translation Keys
 
@@ -104,9 +93,13 @@ Syncing will happen automatically. You can also manually synchronize keys using 
 
 The **TranslateHub** app provides a comprehensive statistics view to help you track the translation progress. Progress bars at the bottom of the left panel shows the progress for the currently selected language and namespace.
 
-If you want to see overall statistics, use the `Show Statistics` option in the `Edit` menu. This dialog shows translation progress for all languages and namespaces as a matrix. Double-click on a cell to navigate directly to that language and namespace.
+If you want to see overall statistics, use the `Statistics` option in the `Edit` menu. This dialog shows translation progress for all languages and namespaces as a matrix. Double-click on a cell to navigate directly to that language and namespace.
 
 Via `Missing Translations` in the `Edit` menu, you can see all missing translations across all languages and namespaces in a list view. Alternatively, you can search within all translations using the `Search` option.
+
+### API Translations
+
+Translating using external APIs is supported but in early `ALPHA` and not jet tested. You can configure API settings in the options dialog (`File` -> `Options`). After that, click the `Translate` button in the editor to translate a missing key for the currently selected language and namespace.
 
 ## Project Structure
 
@@ -114,6 +107,7 @@ Via `Missing Translations` in the `Edit` menu, you can see all missing translati
 
 ```
 root_directory/
+├── _schema/
 ├── en-US/
 │   ├── app.generic.json
 │   ├── app.home.json
