@@ -1,6 +1,9 @@
 name: Build
 
-on: [ pull_request, release ]
+on:
+  pull_request:
+  release:
+    types: [ released ]
 
 jobs:
     build:
@@ -38,7 +41,7 @@ jobs:
                 ./build_windows.bat
 
             - name: Upload artifacts
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                 name: TranslateHub-${{ matrix.os }}
                 path: dist
