@@ -6,7 +6,7 @@ Widget for editing translations
 from typing import Dict, Optional, Set
 
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtGui import QColor, QPalette
+from PyQt6.QtGui import QColor, QFont, QPalette
 from PyQt6.QtWidgets import (
     QCheckBox, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton,
     QScrollArea, QTextEdit, QVBoxLayout, QWidget
@@ -162,8 +162,9 @@ class TranslationEditor ( QWidget ) :
             # Actions
             actions_widget = QWidget()
             actions_layout = QVBoxLayout()
+            actions_layout.setAlignment( Qt.AlignmentFlag.AlignTop )
             actions_layout.setContentsMargins( 0, 0, 0, 0 )
-            actions_layout.setSpacing( 0 )
+            actions_layout.setSpacing( 2 )
 
             rename_btn = QPushButton( "Rename" )
             rename_btn.setProperty( "key", key )
@@ -231,9 +232,9 @@ class TranslationEditor ( QWidget ) :
         """Highlight a text field to indicate modification"""
 
         palette = input_widget.palette()
-        palette.setColor( QPalette.ColorRole.Text, QColor( 0, 0, 0 ) )
-        palette.setColor( QPalette.ColorRole.Base, QColor( 255, 255, 200 ) )
+        palette.setColor( QPalette.ColorRole.Text, QColor( 76, 187, 23 ) )
         input_widget.setPalette( palette )
+        input_widget.setFont( QFont( "", weight= QFont.Weight.Bold ) )
 
 
     def _toggle_hide_translated ( self, checked: bool ) -> None :
