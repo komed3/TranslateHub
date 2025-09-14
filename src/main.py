@@ -81,10 +81,10 @@ class TranslateHub ( QMainWindow ) :
         self.auto_save_timer = QTimer( self )
         self.auto_save_timer.timeout.connect( self._auto_save )
 
-        # Get auto-save interval from settings (default 30 seconds)
+        # Get auto-save interval from settings (default 5 minutes)
         auto_save_enabled = self.settings.value( "auto_save", True, bool )
-        auto_save_interval = self.settings.value( "auto_save_interval", 30000, int )
-
+        auto_save_interval = self.settings.value( "auto_save_interval", 3e5, int )
+        print(auto_save_interval)
         if auto_save_enabled :
             self.auto_save_timer.start( auto_save_interval )
 
@@ -94,7 +94,7 @@ class TranslateHub ( QMainWindow ) :
         self.status_timer.timeout.connect( self._reset_status )
 
         # Get status timeout from settings (default 5 seconds)
-        self.status_timeout = self.settings.value( "status_timeout", 5000, int )
+        self.status_timeout = self.settings.value( "status_timeout", 5e3, int )
 
 
     def _create_ui ( self ) -> None :
@@ -204,7 +204,7 @@ class TranslateHub ( QMainWindow ) :
         # File actions
         self.open_action = QAction( "&Open Project", self )
         self.open_action.setShortcut( "Ctrl+O" )
-        self.open_action.triggered.connect( lambda: self._show_config_dialog )
+        self.open_action.triggered.connect( self._show_config_dialog )
 
         self.close_action = QAction( "&Close Project", self )
         self.close_action.setShortcut( "Ctrl+X" )
@@ -219,7 +219,7 @@ class TranslateHub ( QMainWindow ) :
         self.export_action.triggered.connect( self._show_export_dialog )
 
         self.options_action = QAction( "&Options", self )
-        self.options_action.triggered.connect( self._show_options_dialog() )
+        self.options_action.triggered.connect( self._show_options_dialog )
 
         self.exit_action = QAction( "E&xit", self )
         self.exit_action.setShortcut( "Ctrl+Q" )

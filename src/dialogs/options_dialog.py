@@ -124,7 +124,7 @@ class OptionsDialog ( QDialog ) :
             "{source} - Source language",
             "{target} - Target language",
             "",
-            "<u>Example:</u>"
+            "<u>Example:</u>",
             "https://api.example.com/translate?q={text}&source={source}&target={target}&key={key}"
         ] ) )
         self.api_layout.addWidget( help_label )
@@ -157,11 +157,11 @@ class OptionsDialog ( QDialog ) :
         return {
             "auto_save": self.settings.value( "auto_save", True, bool ),
             "auto_save_interval": int(
-                self.settings.value( "auto_save_interval", 30000, int ) / 1000
+                self.settings.value( "auto_save_interval", 3e5, int ) / 1000
             ),
             "compress_json": self.settings.value( "compress_json", False, bool ),
             "status_timeout": int(
-                self.settings.value( "status_timeout", 5000, int ) / 1000
+                self.settings.value( "status_timeout", 5e3, int ) / 1000
             ),
             "schema_dir_name": self.settings.value( "schema_dir_name", "_schema", str ),
             "api_enabled": self.settings.value( "api_enabled", False, bool ),
