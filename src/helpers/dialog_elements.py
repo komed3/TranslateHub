@@ -11,7 +11,7 @@ def dialog_label ( title: str, size: int = 12 ) -> QLabel :
     """Create a styled label for dialogs"""
 
     label = QLabel( title )
-    label.setFont( QFont( "", size, QFont.Weight.Bold ) )
+    label.setFont( QFont( "Sans-serif", size, QFont.Weight.Bold ) )
 
     return label
 

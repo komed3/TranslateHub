@@ -234,7 +234,7 @@ class TranslationEditor ( QWidget ) :
         palette = input_widget.palette()
         palette.setColor( QPalette.ColorRole.Text, QColor( 76, 187, 23 ) )
         input_widget.setPalette( palette )
-        input_widget.setFont( QFont( "", weight= QFont.Weight.Bold ) )
+        input_widget.setFont( QFont( "Sans-serif", weight= QFont.Weight.Bold ) )
 
 
     def _toggle_hide_translated ( self, checked: bool ) -> None :
