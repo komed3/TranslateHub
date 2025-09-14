@@ -84,7 +84,7 @@ class TranslateHub ( QMainWindow ) :
         # Get auto-save interval from settings (default 5 minutes)
         auto_save_enabled = self.settings.value( "auto_save", True, bool )
         auto_save_interval = self.settings.value( "auto_save_interval", 3e5, int )
-        print(auto_save_interval)
+
         if auto_save_enabled :
             self.auto_save_timer.start( auto_save_interval )
 
