@@ -6,12 +6,11 @@ Cross-platform translation management tool for i18n projects
 from typing import Dict
 
 import os
-from PyQt6.QtCore import QSettings, QSize, Qt, QTimer, QUrl
-from PyQt6.QtGui import QAction, QDesktopServices, QIcon
+from PyQt6.QtCore import QSettings, Qt, QTimer, QUrl
+from PyQt6.QtGui import QDesktopServices, QIcon
 from PyQt6.QtWidgets import (
     QHBoxLayout, QInputDialog, QLabel, QMainWindow, QMenu, QMessageBox,
-    QProgressBar, QPushButton, QSplitter, QStatusBar, QToolBar,
-    QVBoxLayout, QWidget
+    QProgressBar, QPushButton, QSplitter, QStatusBar, QVBoxLayout, QWidget
 )
 
 from .core import TranslationManager
@@ -20,7 +19,7 @@ from .dialogs import (
     OptionsDialog, RenameKeyDialog, SearchDialog, StatisticsDialog,
     TranslationKeyDialog, UpdateDialog
 )
-from .helpers import dialog_label, ui_action, ui_menu
+from .helpers import dialog_label, ui_action, ui_menu, ui_toolbar
 from .utils import TranslationAPI
 from .widgets import FilterableListWidget, TranslationEditor
 
@@ -234,20 +233,15 @@ class TranslateHub ( QMainWindow ) :
     def _create_menus ( self ) -> None :
         """Create application menus"""
 
-        # File menu
         self.file_menu = ui_menu( self, "&File", [
             self.open_action, self.save_all_action, self.export_action, self.import_action,
             None, self.options_action, None, self.close_action, self.exit_action
         ] )
-
-        # Edit menu
         self.edit_menu = ui_menu( self, "&Edit", [
             self.sync_action, self.reset_filter_action, self.search_action, None,
             self.move_keys_action, self.split_ns_action, self.join_ns_action, None,
             self.missing_action, self.stats_action
         ] )
-
-        # Help menu
         self.help_menu = ui_menu( self, "&Help", [
             self.check_updates_action, self.github_action, None, self.about_action
         ] )
@@ -256,15 +250,10 @@ class TranslateHub ( QMainWindow ) :
     def _create_toolbars ( self ) -> None :
         """Create application toolbars"""
 
-        self.main_toolbar = QToolBar( "Main" )
-        self.main_toolbar.setMovable( False )
-        self.main_toolbar.setIconSize( QSize( 16, 16 ) )
-
-        self.main_toolbar.addAction( self.open_action )
-        self.main_toolbar.addAction( self.save_all_action )
-        self.main_toolbar.addAction( self.sync_action )
-        self.main_toolbar.addAction( self.search_action )
-        self.main_toolbar.addAction( self.stats_action )
+        self.main_toolbar = ui_toolbar( "Main", [
+            self.open_action, self.save_all_action, self.sync_action,
+            self.search_action, self.stats_action
+        ], self, False )
 
         self.addToolBar( self.main_toolbar )
 
