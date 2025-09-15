@@ -20,7 +20,7 @@ from .dialogs import (
     OptionsDialog, RenameKeyDialog, SearchDialog, StatisticsDialog,
     TranslationKeyDialog, UpdateDialog
 )
-from .helpers import dialog_label
+from .helpers import dialog_label, ui_action
 from .utils import TranslationAPI
 from .widgets import FilterableListWidget, TranslationEditor
 
@@ -202,61 +202,33 @@ class TranslateHub ( QMainWindow ) :
         """Create application actions"""
 
         # File actions
-        self.open_action = QAction( "&Open Project", self )
-        self.open_action.setShortcut( "Ctrl+O" )
-        self.open_action.triggered.connect( self._show_config_dialog )
-
-        self.close_action = QAction( "&Close Project", self )
-        self.close_action.setShortcut( "Ctrl+X" )
-        self.close_action.triggered.connect( self._close_project )
-
-        self.save_all_action = QAction( "&Save All", self )
-        self.save_all_action.setShortcut( "Ctrl+S" )
-        self.save_all_action.triggered.connect( self._save_all )
-
-        self.export_action = QAction( "&Export", self )
-        self.export_action.setShortcut( "Ctrl+E" )
-        self.export_action.triggered.connect( self._show_export_dialog )
-
-        self.options_action = QAction( "&Options", self )
-        self.options_action.triggered.connect( self._show_options_dialog )
-
-        self.exit_action = QAction( "E&xit", self )
-        self.exit_action.setShortcut( "Ctrl+Q" )
-        self.exit_action.triggered.connect( self.close )
+        self.open_action = ui_action( "&Open Project", self, self._show_config_dialog, "Ctrl+O" )
+        self.close_action = ui_action( "&Close Project", self, self._close_project, "Ctrl+X" )
+        self.save_all_action = ui_action( "&Save All", self, self._save_all, "Ctrl+S" )
+        self.export_action = ui_action( "&Export", self, self._show_export_dialog, "Ctrl+E" )
+        self.import_action = ui_action( "&Import", self, None, "Ctrl+I" )
+        self.options_action = ui_action( "&Options", self, self._show_options_dialog )
+        self.exit_action = ui_action( "E&xit", self, self.close, "Ctrl+Q" )
 
         # Edit actions
-        self.sync_action = QAction( "Synchronize &Keys", self )
-        self.sync_action.setShortcut( "F5" )
-        self.sync_action.triggered.connect( self._synchronize_keys )
-
-        self.reset_filter_action = QAction( "&Reset Filter", self )
-        self.reset_filter_action.setShortcut( "Ctrl+R" )
-        self.reset_filter_action.triggered.connect( self._reset_filter )
-
-        self.search_action = QAction( "Search", self )
-        self.search_action.setShortcut( "F6" )
-        self.search_action.triggered.connect( self._searching )
-
-        self.missing_action = QAction( "&Missing Translations", self )
-        self.missing_action.triggered.connect( self._show_missing )
-
-        self.stats_action = QAction( "&Statistics", self )
-        self.stats_action.triggered.connect( self._show_statistics )
+        self.sync_action = ui_action( "Synchronize &Keys", self, self._synchronize_keys, "F5" )
+        self.reset_filter_action = ui_action( "&Reset Filter", self, self._reset_filter, "Ctrl+R" )
+        self.search_action = ui_action( "S&earch", self, self._searching, "F6" )
+        self.move_keys_action = ui_action( "&Move Keys", self )
+        self.split_ns_action = ui_action( "&Split Namespace", self )
+        self.join_ns_action = ui_action( "&Join Namespaces", self )
+        self.missing_action = ui_action( "&Missing Translations", self, self._show_missing )
+        self.stats_action = ui_action( "S&tatistics", self, self._show_statistics )
 
         # Help actions
-        self.check_updates_action = QAction( "Check for &Updates", self )
-        self.check_updates_action.triggered.connect( self._check_updates )
-
-        self.github_action = QAction( "Visit &GitHub Repository", self )
-        self.github_action.triggered.connect(
+        self.check_updates_action = ui_action( "Check for &Updates", self, self._check_updates )
+        self.about_action = ui_action( "&About TranslateHub", self, self._show_about_dialog )
+        self.github_action = ui_action(
+            "Visit &GitHub Repository", self,
             lambda: QDesktopServices.openUrl(
                 QUrl( f"https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}" )
             )
         )
-
-        self.about_action = QAction( "&About TranslateHub", self )
-        self.about_action.triggered.connect( self._show_about_dialog )
 
 
     def _new_menu ( self, title: str ) -> QMenu :
@@ -279,6 +251,7 @@ class TranslateHub ( QMainWindow ) :
         self.file_menu.addAction( self.open_action )
         self.file_menu.addAction( self.save_all_action )
         self.file_menu.addAction( self.export_action )
+        self.file_menu.addAction( self.import_action )
         self.file_menu.addSeparator()
         self.file_menu.addAction( self.options_action )
         self.file_menu.addSeparator()
@@ -290,6 +263,10 @@ class TranslateHub ( QMainWindow ) :
         self.edit_menu.addAction( self.sync_action )
         self.edit_menu.addAction( self.reset_filter_action )
         self.edit_menu.addAction( self.search_action )
+        self.edit_menu.addSeparator()
+        self.edit_menu.addAction( self.move_keys_action )
+        self.edit_menu.addAction( self.split_ns_action )
+        self.edit_menu.addAction( self.join_ns_action )
         self.edit_menu.addSeparator()
         self.edit_menu.addAction( self.missing_action )
         self.edit_menu.addAction( self.stats_action )
