@@ -10,15 +10,15 @@ from PyQt6.QtWidgets import QMainWindow, QMenu, QToolBar, QWidget
 
 
 def ui_action (
-    name: str, parent: Optional[ QWidget ] = None, callable: Optional[ Callable ] = None,
+    name: str, parent: Optional[ QWidget ] = None, cb: Optional[ Callable ] = None,
     shortcut: Optional[ str ] = None
 ) -> QAction :
     """Create a QAction with optional callback and shortcut"""
 
     action = QAction( name, parent )
 
-    if callable :
-        action.triggered.connect( callable )
+    if cb :
+        action.triggered.connect( cb )
     if shortcut :
         action.setShortcut( shortcut )
 
