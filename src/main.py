@@ -19,7 +19,7 @@ from .dialogs import (
     OptionsDialog, RenameKeyDialog, SearchDialog, StatisticsDialog,
     TranslationKeyDialog, UpdateDialog
 )
-from .helpers import dialog_label, ui_action, ui_menu, ui_toolbar
+from .helpers import ui_action, ui_menu, ui_toolbar, ui_label
 from .utils import TranslationAPI
 from .widgets import FilterableListWidget, TranslationEditor
 
@@ -116,7 +116,7 @@ class TranslateHub ( QMainWindow ) :
         self.add_lang_button = QPushButton( "Add" )
         self.add_lang_button.clicked.connect( self._add_language )
 
-        lang_header.addWidget( dialog_label( "Languages" ) )
+        lang_header.addWidget( ui_label( "Languages" ) )
         lang_header.addWidget( self.add_lang_button )
 
         self.lang_list = FilterableListWidget()
@@ -133,7 +133,7 @@ class TranslateHub ( QMainWindow ) :
         self.add_ns_button = QPushButton( "Add" )
         self.add_ns_button.clicked.connect( self._add_namespace )
 
-        ns_header.addWidget( dialog_label( "Namespaces" ) )
+        ns_header.addWidget( ui_label( "Namespaces" ) )
         ns_header.addWidget( self.add_ns_button )
 
         self.ns_list = FilterableListWidget()
@@ -151,7 +151,7 @@ class TranslateHub ( QMainWindow ) :
         self.namespace_progress = QProgressBar()
         self.namespace_progress.setFormat( "%v/%m (%p%)" )
 
-        progress_layout.addWidget( dialog_label( "Translation Progress" ) )
+        progress_layout.addWidget( ui_label( "Translation Progress" ) )
         progress_layout.addWidget( QLabel( "Selected Language:" ) )
         progress_layout.addWidget( self.language_progress )
         progress_layout.addWidget( QLabel( "Selected Namespace:" ) )
@@ -169,7 +169,7 @@ class TranslateHub ( QMainWindow ) :
 
         # Editor header
         editor_header = QHBoxLayout()
-        self.editor_title = dialog_label( "No Translation Selected", 14 )
+        self.editor_title = ui_label( "No Translation Selected", 14 )
 
         self.add_key_button = QPushButton( "Add Key" )
         self.add_key_button.clicked.connect( self._add_translation_key )

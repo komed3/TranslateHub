@@ -8,7 +8,7 @@ from typing import Dict, Optional
 import requests
 from PyQt6.QtWidgets import QDialog, QLabel, QVBoxLayout, QWidget
 
-from ..helpers import close, dialog_title
+from ..helpers import close, ui_title
 
 
 class UpdateDialog ( QDialog ) :
@@ -38,7 +38,7 @@ class UpdateDialog ( QDialog ) :
         self.layout: QVBoxLayout = QVBoxLayout()
 
         # App title
-        self.layout.addWidget( dialog_title( "Check for updates" ) )
+        self.layout.addWidget( ui_title( "Check for updates" ) )
 
         # Info label
         self.info_label = QLabel( "Fetching version from GitHub API ...<br /><br />" )

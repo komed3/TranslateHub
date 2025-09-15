@@ -10,7 +10,7 @@ from PyQt6.QtCore import PYQT_VERSION_STR, QT_VERSION_STR, QUrl
 from PyQt6.QtGui import QDesktopServices
 from PyQt6.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QWidget
 
-from ..helpers import close, dialog_title
+from ..helpers import close, ui_title
 
 
 class AboutDialog ( QDialog ) :
@@ -37,7 +37,7 @@ class AboutDialog ( QDialog ) :
         self.layout: QVBoxLayout = QVBoxLayout()
 
         # App title
-        self.layout.addWidget( dialog_title( "TranslateHub" ) )
+        self.layout.addWidget( ui_title( "TranslateHub" ) )
 
         # Description
         desc_label = QLabel(

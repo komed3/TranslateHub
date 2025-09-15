@@ -5,8 +5,8 @@ Helper functions for UI elements
 
 from typing import Callable, List, Optional
 
-from PyQt6.QtGui import QAction
-from PyQt6.QtWidgets import QMainWindow, QMenu, QToolBar, QWidget
+from PyQt6.QtGui import QAction, QFont
+from PyQt6.QtWidgets import QLabel, QMainWindow, QMenu, QToolBar, QWidget
 
 
 def ui_action (
@@ -54,3 +54,18 @@ def ui_toolbar (
     toolbar.addActions( items )
 
     return toolbar
+
+
+def ui_label ( title: str, size: int = 12 ) -> QLabel :
+    """Create a styled label for dialogs"""
+
+    label = QLabel( title )
+    label.setFont( QFont( "Sans-serif", size, QFont.Weight.Bold ) )
+
+    return label
+
+
+def ui_title ( title: str ) -> QLabel :
+    """Create a styled title label for dialogs"""
+
+    return ui_label( title, 16 )
