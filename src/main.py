@@ -20,7 +20,7 @@ from .dialogs import (
     OptionsDialog, RenameKeyDialog, SearchDialog, StatisticsDialog,
     TranslationKeyDialog, UpdateDialog
 )
-from .helpers import dialog_label, ui_action
+from .helpers import dialog_label, ui_action, ui_menu
 from .utils import TranslationAPI
 from .widgets import FilterableListWidget, TranslationEditor
 
@@ -231,52 +231,26 @@ class TranslateHub ( QMainWindow ) :
         )
 
 
-    def _new_menu ( self, title: str ) -> QMenu :
-        """Create a menu by title"""
-
-        menu_bar = self.menuBar()
-        assert menu_bar is not None
-
-        menu = menu_bar.addMenu( title )
-        assert menu is not None
-
-        return menu
-
-
     def _create_menus ( self ) -> None :
         """Create application menus"""
 
         # File menu
-        self.file_menu = self._new_menu( "&File" )
-        self.file_menu.addAction( self.open_action )
-        self.file_menu.addAction( self.save_all_action )
-        self.file_menu.addAction( self.export_action )
-        self.file_menu.addAction( self.import_action )
-        self.file_menu.addSeparator()
-        self.file_menu.addAction( self.options_action )
-        self.file_menu.addSeparator()
-        self.file_menu.addAction( self.close_action )
-        self.file_menu.addAction( self.exit_action )
+        self.file_menu = ui_menu( self, "&File", [
+            self.open_action, self.save_all_action, self.export_action, self.import_action,
+            None, self.options_action, None, self.close_action, self.exit_action
+        ] )
 
         # Edit menu
-        self.edit_menu = self._new_menu( "&Edit" )
-        self.edit_menu.addAction( self.sync_action )
-        self.edit_menu.addAction( self.reset_filter_action )
-        self.edit_menu.addAction( self.search_action )
-        self.edit_menu.addSeparator()
-        self.edit_menu.addAction( self.move_keys_action )
-        self.edit_menu.addAction( self.split_ns_action )
-        self.edit_menu.addAction( self.join_ns_action )
-        self.edit_menu.addSeparator()
-        self.edit_menu.addAction( self.missing_action )
-        self.edit_menu.addAction( self.stats_action )
+        self.edit_menu = ui_menu( self, "&Edit", [
+            self.sync_action, self.reset_filter_action, self.search_action, None,
+            self.move_keys_action, self.split_ns_action, self.join_ns_action, None,
+            self.missing_action, self.stats_action
+        ] )
 
         # Help menu
-        self.help_menu = self._new_menu( "&Help" )
-        self.help_menu.addAction( self.check_updates_action )
-        self.help_menu.addAction( self.github_action )
-        self.help_menu.addSeparator()
-        self.help_menu.addAction( self.about_action )
+        self.help_menu = ui_menu( self, "&Help", [
+            self.check_updates_action, self.github_action, None, self.about_action
+        ] )
 
 
     def _create_toolbars ( self ) -> None :
