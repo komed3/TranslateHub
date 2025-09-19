@@ -98,7 +98,7 @@ class FileOperations :
         # Get all language directories
         languages = {
             d for d in os.listdir( self.root_dir )
-            if os.path.isdir( os.path.join( self.root_dir, d ) ) and d.startswith( "." ) == False
+            if os.path.isdir( os.path.join( self.root_dir, d ) ) and d.startswith( "." ) is False
         }
 
         # Get all unique namespaces across all languages
