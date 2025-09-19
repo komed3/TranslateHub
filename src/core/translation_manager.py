@@ -429,7 +429,7 @@ class TranslationManager :
                     if conflict_strategy == "replace" :
                         pass  # overwrite
                     elif conflict_strategy == "keep_both" :
-                        target_key = f"{ns_from.replace( ".json", "" )}_{key}"
+                        target_key = f"{ns_from.replace( '.json', '' )}_{key}"
                         if target_key in data_to :
                             # avoid double prefix
                             continue
