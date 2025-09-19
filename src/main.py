@@ -444,8 +444,11 @@ class TranslateHub ( QMainWindow ) :
             self.t_manager.mark_as_modified( lang, ns, key )
 
 
-    def _auto_save ( self ) -> bool :
+    def _auto_save ( self, force: bool = False ) -> bool :
         """Auto-save current translations"""
+
+        if not force and self.t_editor.is_editing() :
+            return False
 
         if (
             self.t_editor.current_lang
@@ -470,7 +473,7 @@ class TranslateHub ( QMainWindow ) :
     def _save_all ( self ) -> None :
         """Save all translations"""
 
-        if self._auto_save() :
+        if self._auto_save( True ) :
             self._set_status_message( "All translations saved" )
         else:
             self._set_status_message( "Translation up to date" )
