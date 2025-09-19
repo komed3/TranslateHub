@@ -425,7 +425,8 @@ class TranslationManager :
                 if exists :
                     if conflict_strategy == "skip" :
                         continue
-                    elif conflict_strategy == "replace" :
+
+                    if conflict_strategy == "replace" :
                         pass  # overwrite
                     elif conflict_strategy == "keep_both" :
                         target_key = f"{ns_from.replace( ".json", "" )}_{key}"
