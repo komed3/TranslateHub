@@ -5,12 +5,14 @@ Widget for editing translations
 
 from typing import Dict, Optional, Set
 
-from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtGui import QColor, QFont, QPalette
+from PyQt6.QtCore import Qt, pyqtSignal, QEvent
+from PyQt6.QtGui import QColor, QFont, QPalette, QKeyEvent
 from PyQt6.QtWidgets import (
-    QCheckBox, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton,
+    QCheckBox, QGridLayout, QHBoxLayout, QLineEdit, QPushButton,
     QScrollArea, QTextEdit, QVBoxLayout, QWidget
 )
+
+from ..helpers import ui_label
 
 
 class TranslationEditor ( QWidget ) :
@@ -66,6 +68,9 @@ class TranslationEditor ( QWidget ) :
 
         self.setLayout( self.layout )
 
+        self._edit_fields: list[QTextEdit] = []
+        self._editing: bool = False  # True if any field has focus
+
 
     def load_translations ( self, lang: str, ns: str, data: Dict[ str, str ] ) -> None :
         """
@@ -80,7 +85,7 @@ class TranslationEditor ( QWidget ) :
         self.current_ns = ns
         self.data = data
         self.modified_keys.clear()
-
+        self._edit_fields.clear()
         self._refresh_grid()
 
 
@@ -126,6 +131,7 @@ class TranslationEditor ( QWidget ) :
         """Refresh the translation grid"""
 
         q = self.filter_input.text().lower().strip()
+        self._edit_fields.clear()
 
         # Clear existing widgets
         while self.grid_layout.count() :
@@ -133,36 +139,27 @@ class TranslationEditor ( QWidget ) :
             if item and ( widget := item.widget() ) :
                 widget.deleteLater()
 
-        # Add translation rows
-        row = 1
+        row = 0
         for key, value in sorted( self.data.items() ) :
-            # Skip translated values if hide_translated is enabled
             if ( self.hide_translated and value.strip() ) or (
                 q and q not in key.lower() and q not in value.lower()
             ) :
                 continue
 
-            # Key label
-            key_label = QLabel( key )
+            # --- First row: Key label and buttons ---
+            row_widget = QWidget()
+            row_layout = QHBoxLayout()
+            row_layout.setContentsMargins( 0, 0, 0, 0 )
+            row_layout.setSpacing( 6 )
+
+            key_label = ui_label( key )
             key_label.setTextInteractionFlags( Qt.TextInteractionFlag.TextSelectableByMouse )
             key_label.setWordWrap( True )
-
-            # Translation input
-            t_input = QTextEdit()
-            t_input.setPlainText( value )
-            t_input.setProperty( "key", key )
-            t_input.textChanged.connect(
-                lambda input_widget= t_input: self._on_translation_changed( input_widget )
-            )
-
-            # Highlight modified keys
-            if key in self.modified_keys :
-                self._highlight_text_field( t_input )
+            row_layout.addWidget( key_label, 1 )
 
             # Actions
             actions_widget = QWidget()
-            actions_layout = QVBoxLayout()
-            actions_layout.setAlignment( Qt.AlignmentFlag.AlignTop )
+            actions_layout = QHBoxLayout()
             actions_layout.setContentsMargins( 0, 0, 0, 0 )
             actions_layout.setSpacing( 2 )
 
@@ -171,6 +168,14 @@ class TranslationEditor ( QWidget ) :
             rename_btn.clicked.connect(
                 lambda checked, btn= rename_btn: self.key_action_requested.emit(
                     "rename", btn.property( "key" )
+                )
+            )
+
+            move_btn = QPushButton( "Move" )
+            move_btn.setProperty( "key", key )
+            move_btn.clicked.connect(
+                lambda checked, btn=move_btn: self.key_action_requested.emit(
+                    "move", btn.property( "key" )
                 )
             )
 
@@ -190,31 +195,77 @@ class TranslationEditor ( QWidget ) :
                 )
             )
 
-            move_btn = QPushButton( "Move" )
-            move_btn.setProperty( "key", key )
-            move_btn.clicked.connect(
-                lambda checked, btn=move_btn: self.key_action_requested.emit(
-                    "move", btn.property( "key" )
-                )
-            )
-
             actions_layout.addWidget( rename_btn )
+            actions_layout.addWidget( move_btn )
             actions_layout.addWidget( delete_btn )
             actions_layout.addWidget( translate_btn )
-            actions_layout.addWidget( move_btn )
-
             actions_widget.setLayout( actions_layout )
+            row_layout.addWidget( actions_widget, 0 )
 
-            self.grid_layout.addWidget( key_label, row, 0 )
-            self.grid_layout.addWidget( t_input, row, 1 )
-            self.grid_layout.addWidget( actions_widget, row, 2 )
-            row += 1
+            row_widget.setLayout( row_layout )
+            self.grid_layout.addWidget( row_widget, row, 0, 1, 2 )
 
-        # Add headers if there are rows
-        if row > 1 :
-            self.grid_layout.addWidget( QLabel( "Key" ), 0, 0 )
-            self.grid_layout.addWidget( QLabel( "Translation" ), 0, 1 )
-            self.grid_layout.addWidget( QLabel( "Actions" ), 0, 2 )
+            # --- Second row: Translation input (full width) ---
+            t_input = QTextEdit()
+            t_input.setPlainText( value )
+            t_input.setProperty( "key", key )
+            t_input.installEventFilter( self )  # For Ctrl+Tab navigation
+            t_input.focusInEvent = self._make_focus_in_handler( t_input )
+            t_input.focusOutEvent = self._make_focus_out_handler( t_input )
+            t_input.textChanged.connect(
+                lambda input_widget= t_input: self._on_translation_changed( input_widget )
+            )
+            self._edit_fields.append( t_input )
+
+            if key in self.modified_keys :
+                self._highlight_text_field( t_input )
+
+            self.grid_layout.addWidget( t_input, row + 1, 0, 1, 2 )
+            row += 2
+
+
+    def is_editing ( self ) -> bool :
+        """Returns True if any translation field is being edited (has focus)."""
+
+        return self._editing
+
+
+    def eventFilter ( self, obj, event ) -> bool :  # pylint: disable=invalid-name
+        """Event filter for handling Ctrl+Tab navigation between text fields"""
+
+        if isinstance( obj, QTextEdit ) and event.type() == QEvent.Type.KeyPress :
+            key_event : QKeyEvent = event
+            if (
+                key_event.key() == Qt.Key.Key_Tab and
+                key_event.modifiers() & Qt.KeyboardModifier.ControlModifier
+            ) :
+                self._edit_fields[
+                    ( self._edit_fields.index( obj ) + 1 ) %
+                    len( self._edit_fields )
+                ].setFocus()
+                return True
+
+        return super().eventFilter( obj, event )
+
+
+    def _make_focus_in_handler ( self, widget ) :
+        """Create a focus-in event handler for a text field"""
+
+        def handler ( e ) -> None :
+            self._editing = True
+            QTextEdit.focusInEvent( widget, e )
+
+        return handler
+
+
+    def _make_focus_out_handler ( self, widget ) :
+        """Create a focus-out event handler for a text field"""
+
+        def handler ( e ) -> None :
+            self._editing = any( f.hasFocus() for f in self._edit_fields )
+            QTextEdit.focusOutEvent( widget, e )
+
+        return handler
 
 
     def _on_translation_changed ( self, input_widget: QTextEdit ) -> None :
