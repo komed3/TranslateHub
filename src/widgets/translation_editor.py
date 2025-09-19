@@ -190,9 +190,18 @@ class TranslationEditor ( QWidget ) :
                 )
             )
 
+            move_btn = QPushButton( "Move" )
+            move_btn.setProperty( "key", key )
+            move_btn.clicked.connect(
+                lambda checked, btn=move_btn: self.key_action_requested.emit(
+                    "move", btn.property( "key" )
+                )
+            )
+
             actions_layout.addWidget( rename_btn )
             actions_layout.addWidget( delete_btn )
             actions_layout.addWidget( translate_btn )
+            actions_layout.addWidget( move_btn )
 
             actions_widget.setLayout( actions_layout )
 

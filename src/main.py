@@ -660,6 +660,8 @@ class TranslateHub ( QMainWindow ) :
             self._rename_translation_key( ns, key )
         elif action == "delete" :
             self._delete_translation_key( ns, key )
+        elif action == "move" :
+            self._move_translation_key( ns, key )
 
 
     def _on_translate_requested ( self, lang: str, ns: str, key: str ) -> None :
@@ -761,6 +763,23 @@ class TranslateHub ( QMainWindow ) :
                 QMessageBox.warning(
                     self, "Error", f"Could not delete key '{key}' from {ns}"
                 )
+
+
+    def _move_translation_key ( self, ns: str, key: str ) -> None :
+        """Move a translation key to another namespace"""
+
+        dialog = MoveKeysDialog(
+            self, [ key ], self.t_manager.get_namespaces(),
+            ns, preselect_keys= [ key ]
+        )
+
+        if dialog.exec() :
+            selected_keys, target_ns, strategy = dialog.get_result()
+            if selected_keys and target_ns :
+                ok = self.t_manager.move_translation_keys( ns, target_ns, selected_keys, strategy )
+                if ok :
+                    self._refresh_ui()
+                    self._set_status_message( f"Moved key '{key}' to {target_ns}" )
 
 
     def _synchronize_keys ( self ) -> None :
