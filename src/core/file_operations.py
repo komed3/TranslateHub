@@ -98,7 +98,7 @@ class FileOperations :
         # Get all language directories
         languages = {
             d for d in os.listdir( self.root_dir )
-            if os.path.isdir( os.path.join( self.root_dir, d ) )
+            if os.path.isdir( os.path.join( self.root_dir, d ) ) and d.startswith( "." ) == False
         }
 
         # Get all unique namespaces across all languages
@@ -109,7 +109,7 @@ class FileOperations :
 
             lang_dir = os.path.join( self.root_dir, lang )
             for file in os.listdir( lang_dir ) :
-                if file.endswith( ".json" ) :
+                if file.endswith( ".json" ) and not file.startswith( "." ) :
                     namespaces.add( file )
 
         return languages, namespaces
