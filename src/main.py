@@ -16,8 +16,8 @@ from PyQt6.QtWidgets import (
 from .core import TranslationManager
 from .dialogs import (
     AboutDialog, ConfigDialog, ExportDialog, MissingTranslationsDialog,
-    OptionsDialog, RenameKeyDialog, SearchDialog, StatisticsDialog,
-    TranslationKeyDialog, UpdateDialog
+    MoveKeysDialog, OptionsDialog, RenameKeyDialog, SearchDialog,
+    StatisticsDialog, TranslationKeyDialog, UpdateDialog
 )
 from .helpers import ui_action, ui_menu, ui_toolbar, ui_label
 from .utils import TranslationAPI
@@ -213,7 +213,7 @@ class TranslateHub ( QMainWindow ) :
         self.sync_action = ui_action( "Synchronize &Keys", self, self._synchronize_keys, "F5" )
         self.reset_filter_action = ui_action( "&Reset Filter", self, self._reset_filter, "Ctrl+R" )
         self.search_action = ui_action( "S&earch", self, self._searching, "F6" )
-        self.move_keys_action = ui_action( "&Move Keys", self )
+        self.move_keys_action = ui_action( "&Move Keys", self, self._move_keys )
         self.split_ns_action = ui_action( "&Split Namespace", self )
         self.join_ns_action = ui_action( "&Join Namespaces", self )
         self.missing_action = ui_action( "&Missing Translations", self, self._show_missing )
@@ -872,3 +872,34 @@ class TranslateHub ( QMainWindow ) :
         # Save current translations before closing
         self._save_all()
         event.accept()
+
+
+    def _move_keys ( self ) -> None :
+        """Move selected keys from current namespace to another"""
+
+        if not self.ns_list.current_item() :
+            QMessageBox.warning(
+                self, "No Namespace Selected",
+                "Please select a namespace to move keys from."
+            )
+            return
+
+        ns = self.ns_list.current_item_safe().text()
+        keys = list( self.t_manager.get_translations(
+            self.lang_list.current_item_safe().text(), ns
+        ).keys() )
+
+        if not keys :
+            QMessageBox.information(
+                self, "No Keys", f"No keys found in namespace '{ns}' to move."
+            )
+            return
+
+        dialog = MoveKeysDialog ( self, keys, self.t_manager.get_namespaces(), ns )
+        if dialog.exec() :
+            selected_keys, target_ns, strategy = dialog.get_result()
+            if selected_keys and target_ns :
+                ok = self.t_manager.move_translation_keys( ns, target_ns, selected_keys, strategy )
+                if ok :
+                    self._refresh_ui()
+                    self._set_status_message( f"Moved {len( selected_keys )} keys to {target_ns}" )

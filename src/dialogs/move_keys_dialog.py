@@ -6,11 +6,11 @@ Dialog to move translation keys between namespaces
 from typing import List, Optional, Tuple
 
 from PyQt6.QtWidgets import (
-    QComboBox, QDialog, QGroupBox, QHBoxLayout, QListWidget, QListWidgetItem,
-    QRadioButton, QVBoxLayout, QWidget
+    QComboBox, QDialog, QGroupBox, QHBoxLayout, QLabel, QListWidget,
+    QListWidgetItem, QRadioButton, QVBoxLayout, QWidget
 )
 
-from ..helpers import ok_close, ui_label
+from ..helpers import ok_close
 
 class MoveKeysDialog ( QDialog ) :
     """Dialog to move translation keys between namespaces"""
@@ -64,7 +64,7 @@ class MoveKeysDialog ( QDialog ) :
             if ns != current_ns :
                 self.ns_combo.addItem( ns )
 
-        ns_layout.addWidget( ui_label( "Move to:" ) )
+        ns_layout.addWidget( QLabel( "Move to:" ) )
         ns_layout.addWidget( self.ns_combo )
         ns_group.setLayout( ns_layout )
 
