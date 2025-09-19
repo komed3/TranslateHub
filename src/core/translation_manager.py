@@ -384,3 +384,67 @@ class TranslationManager :
         """Clear the modified translations set"""
 
         self.modified_translations.clear()
+
+
+    def move_translation_keys (
+        self, ns_from: str, ns_to: str, keys: List[ str ], conflict_strategy: str = "skip"
+    ) -> bool :
+        """
+        Move translation keys from one namespace to another for all languages and schema.
+        Args:
+            ns_from: Source namespace
+            ns_to: Target namespace
+            keys: List of keys to move
+            conflict_strategy: "skip", "replace", or "keep_both"
+        """
+        if (
+            not self.file_ops.root_dir
+            or ns_from not in self.structure_manager.namespaces
+            or ns_to not in self.structure_manager.namespaces
+            or ns_from == ns_to
+            or not keys
+        ) :
+            return False
+
+        changed = False
+        all_langs = list( self.structure_manager.languages ) + [ self.file_ops.schema_dir_name ]
+
+        for lang in all_langs :
+            data_from = self.trans_ops.get_translations( lang, ns_from )
+            data_to = self.trans_ops.get_translations( lang, ns_to )
+            updated = False
+
+            for key in keys :
+                if key not in data_from :
+                    continue
+
+                value = data_from[ key ]
+                target_key = key
+                exists = key in data_to
+
+                if exists :
+                    if conflict_strategy == "skip" :
+                        continue
+                    elif conflict_strategy == "replace" :
+                        pass  # overwrite
+                    elif conflict_strategy == "keep_both" :
+                        target_key = f"{ns_from.replace( ".json", "" )}_{key}"
+                        if target_key in data_to :
+                            # avoid double prefix
+                            continue
+
+                data_to[ target_key ] = value
+                del data_from[ key ]
+                updated = True
+                changed = True
+
+            if updated :
+                self.trans_ops.save_translations( lang, ns_from, data_from )
+                self.trans_ops.save_translations( lang, ns_to, data_to )
+
+        # sync after moving
+        self.trans_ops.synchronize_keys_for_namespace( ns_from, set( all_langs ) )
+        self.trans_ops.synchronize_keys_for_namespace( ns_to, set( all_langs ) )
+        self.structure_manager.synchronize_schema()
+
+        return changed
