@@ -2,6 +2,21 @@
 
 All notable changes to TranslateHub will be documented in this file.
 
+## [0.2.1] - 2026-03-09
+
+### Updated
+- **PyQt6** updated to 6.10.2
+- **PyQt6-Qt6** updated to 6.10.2
+- **altgraph** updated to 0.17.5
+- **certifi** updated to 2026.2.25
+- **charset-normalizer** updated to 3.4.5
+- **idna** updated to 3.11
+- **packaging** updated to 26.0
+- **pyinstaller** updated to 6.19.0
+- **pyinstaller-hooks-contrib** updated to 2026.2
+- **setuptools** updated to 82.0.0
+- **urllib3** updated to 2.6.3
+
 ## [0.2.0] - 2025-09-14
 
 ### Added
