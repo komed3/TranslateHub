@@ -32,7 +32,7 @@ class AboutDialog ( QDialog ) :
 
         super().__init__( parent )
         self.setWindowTitle( "About TranslateHub" )
-        self.resize( 400, 300 )
+        self.resize( 500, 300 )
 
         self.layout: QVBoxLayout = QVBoxLayout()
 
