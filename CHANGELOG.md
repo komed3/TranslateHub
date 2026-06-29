@@ -4,6 +4,17 @@ All notable changes to TranslateHub will be documented in this file.
 
 ## [0.2.1] - 2026-03-09
 
+### Added
+- Dialog to move keys from one to another namespace.
+- UI helper elements.
+
+### Changed
+- Reworked translation editor (`Ctrl+Tab` navigation; layout fix).
+
+### Fixed
+- Exclude dot files and folders while scanning file structure.
+- Do not auto save while editing.
+
 ### Updated
 - **PyQt6** updated to 6.10.2
 - **PyQt6-Qt6** updated to 6.10.2
